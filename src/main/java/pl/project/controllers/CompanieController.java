@@ -12,31 +12,31 @@ public class CompanieController {
     @Autowired
     private CompanieService companieService;
 
-    @RequestMapping("/companie")
+    @GetMapping("/companie")
     @CrossOrigin(origins = "*")
     public List<Companie> getAllCompanie() {
         return companieService.getAllCompanie();
     }
 
-    @RequestMapping("/companie/{id}")
+    @GetMapping("/companie/{id}")
     @CrossOrigin(origins = "*")
     public Companie getCity(@PathVariable Integer id) {
         return companieService.getCompanie(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/companie")
+    @PostMapping(value = "/companie")
     @CrossOrigin(origins = "*")
     public void addCity(@RequestBody Companie companie) {
         companieService.addCompanie(companie);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/companie/{id}")
+    @PutMapping(value = "/companie/{id}")
     @CrossOrigin(origins = "*")
     public void updateCity(@RequestBody Companie companie, @PathVariable Integer id) {
         companieService.updateCompanie(id, companie);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/companie/{id}")
+    @DeleteMapping(value = "/companie/{id}")
     @CrossOrigin(origins = "*")
     public void deleteCity(@PathVariable Integer id) {
         companieService.deleteCompanie(id);

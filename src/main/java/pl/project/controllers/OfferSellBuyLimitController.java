@@ -12,31 +12,31 @@ public class OfferSellBuyLimitController {
     @Autowired
     private OfferSellBuyLimitService offerSellBuyLimitService;
 
-    @RequestMapping("/offerSellBuyLimit")
+    @GetMapping("/offerSellBuyLimit")
     @CrossOrigin(origins = "*")
     public List<OfferSellBuyLimit> getAllOfferSellBuyLimit() {
         return offerSellBuyLimitService.getAllOfferSellBuyLimit();
     }
 
-    @RequestMapping("/offerSellBuyLimit/{id}")
+    @GetMapping("/offerSellBuyLimit/{id}")
     @CrossOrigin(origins = "*")
     public OfferSellBuyLimit getOfferSellBuyLimit(@PathVariable Integer id) {
         return offerSellBuyLimitService.getOfferSellBuyLimit(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/offerSellBuyLimit")
+    @PostMapping(value = "/offerSellBuyLimit")
     @CrossOrigin(origins = "*")
     public void addOfferSellBuyLimit(@RequestBody OfferSellBuyLimit offerSellBuyLimit) {
         offerSellBuyLimitService.addOfferSellBuyLimit(offerSellBuyLimit);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/offerSellBuyLimit/{id}")
+    @PutMapping(value = "/offerSellBuyLimit/{id}")
     @CrossOrigin(origins = "*")
     public void updateOfferSellBuyLimit(@RequestBody OfferSellBuyLimit offerSellBuyLimit, @PathVariable Integer id) {
         offerSellBuyLimitService.updateOfferSellBuyLimit(id, offerSellBuyLimit);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/offerSellBuyLimit/{id}")
+    @DeleteMapping(value = "/offerSellBuyLimit/{id}")
     @CrossOrigin(origins = "*")
     public void deleteOfferSellBuyLimit(@PathVariable Integer id) {
         offerSellBuyLimitService.deleteOfferSellBuyLimit(id);

@@ -12,31 +12,31 @@ public class CompanieStatisticsController {
     @Autowired
     private CompanieStatisticsService companieStatisticsService;
 
-    @RequestMapping("/companieStatistic")
+    @GetMapping("/companieStatistic")
     @CrossOrigin(origins = "*")
     public List<CompanieStatistics> getAllCompanieStatistics() {
         return companieStatisticsService.getAllCompanieStatistics();
     }
 
-    @RequestMapping("/companieStatistic/{id}")
+    @GetMapping("/companieStatistic/{id}")
     @CrossOrigin(origins = "*")
     public CompanieStatistics getCompanieStatistics(@PathVariable Integer id) {
         return companieStatisticsService.getCompanieStatistics(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/companieStatistic")
+    @PostMapping(value = "/companieStatistic")
     @CrossOrigin(origins = "*")
     public void addCompanieStatistics(@RequestBody CompanieStatistics companiesStatistic) {
         companieStatisticsService.addCompanieStatistics(companiesStatistic);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/companieStatistic/{id}")
+    @PutMapping(value = "/companieStatistic/{id}")
     @CrossOrigin(origins = "*")
     public void updateCompanieStatistics(@RequestBody CompanieStatistics companiesStatistic, @PathVariable Integer id) {
         companieStatisticsService.updateCompanieStatistics(id, companiesStatistic);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/companieStatistic/{id}")
+    @DeleteMapping(value = "/companieStatistic/{id}")
     @CrossOrigin(origins = "*")
     public void deleteCompanieStatistics(@PathVariable Integer id) {
         companieStatisticsService.deleteCompanieStatistics(id);

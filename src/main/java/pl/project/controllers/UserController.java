@@ -12,31 +12,31 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/user")
+    @GetMapping("/user")
     @CrossOrigin(origins = "*")
     public List<User> getUser() {
         return userService.getAllUser();
     }
 
-    @RequestMapping("/user/{id}")
+    @GetMapping("/user/{id}")
     @CrossOrigin(origins = "*")
     public User getUser(@PathVariable Integer id) {
         return userService.getUser(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user")
+    @PostMapping(value = "/user")
     @CrossOrigin(origins = "*")
     public void addUser(@RequestBody User user) {
         userService.addUser(user);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/user/{id}")
+    @PutMapping(value = "/user/{id}")
     @CrossOrigin(origins = "*")
     public void updateUser(@RequestBody User user, @PathVariable Integer id) {
         userService.updateUser(id, user);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/user/{id}")
+    @DeleteMapping(value = "/user/{id}")
     @CrossOrigin(origins = "*")
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

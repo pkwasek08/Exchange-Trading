@@ -12,31 +12,31 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @RequestMapping("/transaction")
+    @GetMapping("/transaction")
     @CrossOrigin(origins = "*")
     public List<Transaction> getTransaction() {
         return transactionService.getAllTransaction();
     }
 
-    @RequestMapping("/transaction/{id}")
+    @GetMapping("/transaction/{id}")
     @CrossOrigin(origins = "*")
     public Transaction getTransaction(@PathVariable Integer id) {
         return transactionService.getTransaction(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/transaction")
+    @PostMapping(value = "/transaction")
     @CrossOrigin(origins = "*")
     public void addTransaction(@RequestBody Transaction transaction) {
         transactionService.addTransaction(transaction);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/transaction/{id}")
+    @PutMapping(value = "/transaction/{id}")
     @CrossOrigin(origins = "*")
     public void updateTransaction(@RequestBody Transaction transaction, @PathVariable Integer id) {
         transactionService.updateTransaction(id, transaction);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/transaction/{id}")
+    @DeleteMapping(value = "/transaction/{id}")
     @CrossOrigin(origins = "*")
     public void deleteTransaction(@PathVariable Integer id) {
         transactionService.deleteTransaction(id);

@@ -12,31 +12,31 @@ public class OfferSellBuyController {
     @Autowired
     private OfferSellBuyService offerSellBuyService;
 
-    @RequestMapping("/offerSellBuy")
+    @GetMapping("/offerSellBuy")
     @CrossOrigin(origins = "*")
     public List<OfferSellBuy> getAllOfferSellBuy() {
         return offerSellBuyService.getAllOfferSellBuy();
     }
 
-    @RequestMapping("/offerSellBuy/{id}")
+    @GetMapping("/offerSellBuy/{id}")
     @CrossOrigin(origins = "*")
     public OfferSellBuy getOfferSellBuy(@PathVariable Integer id) {
         return offerSellBuyService.getOfferSellBuy(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/offerSellBuy")
+    @PostMapping(value = "/offerSellBuy")
     @CrossOrigin(origins = "*")
     public void addOfferSellBuy(@RequestBody OfferSellBuy offerSellBuy) {
         offerSellBuyService.addOfferSellBuy(offerSellBuy);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/offerSellBuy/{id}")
+    @PutMapping(value = "/offerSellBuy/{id}")
     @CrossOrigin(origins = "*")
     public void updateOfferSellBuy(@RequestBody OfferSellBuy offerSellBuy, @PathVariable Integer id) {
         offerSellBuyService.updateOfferSellBuy(id, offerSellBuy);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/offerSellBuy/{id}")
+    @DeleteMapping(value = "/offerSellBuy/{id}")
     @CrossOrigin(origins = "*")
     public void deleteOfferSellBuy(@PathVariable Integer id) {
         offerSellBuyService.deleteOfferSellBuy(id);

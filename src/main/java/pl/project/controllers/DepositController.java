@@ -12,31 +12,31 @@ public class DepositController {
     @Autowired
     private DepositService depositService;
 
-    @RequestMapping("/deposit")
+    @GetMapping("/deposit")
     @CrossOrigin(origins = "*")
     public List<Deposit> getAllDeposit() {
         return depositService.getAllDeposit();
     }
 
-    @RequestMapping("/deposit/{id}")
+    @GetMapping("/deposit/{id}")
     @CrossOrigin(origins = "*")
     public Deposit getDeposit(@PathVariable Integer id) {
         return depositService.getDeposit(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/deposit")
+    @PostMapping(value = "/deposit")
     @CrossOrigin(origins = "*")
     public void addDeposit(@RequestBody Deposit deposit) {
         depositService.addDeposit(deposit);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/deposit/{id}")
+    @PutMapping(value = "/deposit/{id}")
     @CrossOrigin(origins = "*")
     public void updateDeposit(@RequestBody Deposit deposit, @PathVariable Integer id) {
         depositService.updateDeposit(id, deposit);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deposit/{id}")
+    @DeleteMapping(value = "/deposit/{id}")
     @CrossOrigin(origins = "*")
     public void deleteDeposit(@PathVariable Integer id) {
         depositService.deleteDeposit(id);
