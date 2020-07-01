@@ -3,7 +3,7 @@ package pl.project.entieties;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "offers_sell_buy", schema = "public", catalog = "dci330qdffiqdm")
+@Table(name = "offers_Sell_Buy")
 public class OfferSellBuy {
     private int id;
     private Integer amount;

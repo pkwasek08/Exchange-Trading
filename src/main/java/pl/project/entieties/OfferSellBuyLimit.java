@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "offers_sell_buy_limit", schema = "public", catalog = "dci330qdffiqdm")
+@Table(name = "offers_Sell_Buy_Limit")
 public class OfferSellBuyLimit {
     private int id;
     private Integer amount;
     private BigDecimal price;
     private BigDecimal limit;
     private String type;
-    private Companie companieByCompanyId;
+    private Companie companiesByCompanyId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -91,11 +91,11 @@ public class OfferSellBuyLimit {
 
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
-    public Companie getCompanieByCompanyId() {
-        return companieByCompanyId;
+    public Companie getCompaniesByCompanyId() {
+        return companiesByCompanyId;
     }
 
-    public void setCompanieByCompanyId(Companie companieByCompanyId) {
-        this.companieByCompanyId = companieByCompanyId;
+    public void setCompaniesByCompanyId(Companie companiesByCompanyId) {
+        this.companiesByCompanyId = companiesByCompanyId;
     }
 }

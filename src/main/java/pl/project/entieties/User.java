@@ -4,12 +4,12 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "users", schema = "public", catalog = "dci330qdffiqdm")
+@Table(name = "users")
 public class User {
     private int id;
     private String name;
     private String lastname;
-    private Long accountNumber;
+    private Integer accountNumber;
     private String email;
     private Timestamp createdAt;
     private Timestamp birthday;
@@ -17,6 +17,7 @@ public class User {
     private String login;
     private String password;
     private Integer securityCode;
+    private Integer depositId;
     private Deposit depositByDepositId;
 
     @Id
@@ -50,12 +51,12 @@ public class User {
     }
 
     @Basic
-    @Column(name = "account_number", nullable = true, precision = 0)
-    public Long getAccountNumber() {
+    @Column(name = "account_number", nullable = true)
+    public Integer getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(Integer accountNumber) {
         this.accountNumber = accountNumber;
     }
 
@@ -129,6 +130,16 @@ public class User {
         this.securityCode = securityCode;
     }
 
+    @Basic
+    @Column(name = "deposit_id", nullable = true)
+    public Integer getDepositId() {
+        return depositId;
+    }
+
+    public void setDepositId(Integer depositId) {
+        this.depositId = depositId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,6 +159,7 @@ public class User {
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (securityCode != null ? !securityCode.equals(user.securityCode) : user.securityCode != null) return false;
+        if (depositId != null ? !depositId.equals(user.depositId) : user.depositId != null) return false;
 
         return true;
     }
@@ -165,11 +177,12 @@ public class User {
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (securityCode != null ? securityCode.hashCode() : 0);
+        result = 31 * result + (depositId != null ? depositId.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "deposit_id", referencedColumnName = "id")
+    @JoinColumn(name = "deposit_id", referencedColumnName = "id",  insertable =false, updatable =false)
     public Deposit getDepositByDepositId() {
         return depositByDepositId;
     }

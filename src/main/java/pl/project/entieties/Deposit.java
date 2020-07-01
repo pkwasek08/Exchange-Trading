@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "deposits", schema = "public", catalog = "dci330qdffiqdm")
+@Table(name = "deposits")
 public class Deposit {
     private int id;
     private BigDecimal cash;
-    private Transaction transactionByTransactionId;
+    private Integer transactionId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -30,6 +30,16 @@ public class Deposit {
         this.cash = cash;
     }
 
+    @Basic
+    @Column(name = "transaction_id", nullable = true)
+    public Integer getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(Integer transactionId) {
+        this.transactionId = transactionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,6 +49,8 @@ public class Deposit {
 
         if (id != deposit.id) return false;
         if (cash != null ? !cash.equals(deposit.cash) : deposit.cash != null) return false;
+        if (transactionId != null ? !transactionId.equals(deposit.transactionId) : deposit.transactionId != null)
+            return false;
 
         return true;
     }
@@ -47,16 +59,7 @@ public class Deposit {
     public int hashCode() {
         int result = id;
         result = 31 * result + (cash != null ? cash.hashCode() : 0);
+        result = 31 * result + (transactionId != null ? transactionId.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
-    public Transaction getTransactionByTransactionId() {
-        return transactionByTransactionId;
-    }
-
-    public void setTransactionByTransactionId(Transaction transactionByTransactionId) {
-        this.transactionByTransactionId = transactionByTransactionId;
     }
 }

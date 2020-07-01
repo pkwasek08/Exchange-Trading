@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "companies_statistics", schema = "public", catalog = "dci330qdffiqdm")
+@Table(name = "companies_Statistics")
 public class CompanieStatistics {
     private int id;
     private BigDecimal price;
@@ -14,7 +14,6 @@ public class CompanieStatistics {
     private BigDecimal maxPrice;
     private BigDecimal minPrice;
     private BigDecimal trendValue;
-    private Companie companieByCompanieId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -114,15 +113,5 @@ public class CompanieStatistics {
         result = 31 * result + (minPrice != null ? minPrice.hashCode() : 0);
         result = 31 * result + (trendValue != null ? trendValue.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "companie_id", referencedColumnName = "id")
-    public Companie getCompanieByCompanieId() {
-        return companieByCompanieId;
-    }
-
-    public void setCompanieByCompanieId(Companie companieByCompanieId) {
-        this.companieByCompanieId = companieByCompanieId;
     }
 }

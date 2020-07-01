@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:11-alpine
+    volumes:
+      - db-java-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=exchange
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - 5432:5432
+
+  dt-api:
+    image: pkwasek/et-api:2.0
+    environment:
+      - DB_SERVER=postgres
+      - POSTGRES_DB=exchange
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - 8080:8080
+
+  et-app:
+    image: pkwasek/et-angular-app:3.0
+    container_name: et-app-angular
+    ports:
+      - 4200:80
+
+volumes:
+  db-java-data:
