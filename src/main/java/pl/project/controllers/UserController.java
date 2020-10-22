@@ -24,6 +24,12 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @RequestMapping("/user/login")
+    @CrossOrigin(origins = "*")
+    public User getUserByEmailAndPassword(@RequestParam String email, @RequestParam String password) {
+        return userService.getUserByEmailAndPassword(email, password);
+    }
+
     @PostMapping(value = "/user")
     @CrossOrigin(origins = "*")
     public void addUser(@RequestBody User user) {

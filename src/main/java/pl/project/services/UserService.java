@@ -24,6 +24,11 @@ public class UserService {
         return user;
     }
 
+    public User getUserByEmailAndPassword(String email, String password) {
+        User user = userRepository.findByEmailAndPassword(email, password);
+        return user;
+    }
+
     public void addUser(User user) {
         userRepository.save(user);
     }

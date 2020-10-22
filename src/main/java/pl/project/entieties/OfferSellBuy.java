@@ -12,6 +12,7 @@ public class OfferSellBuy {
     private Companie companieByCompanyId;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

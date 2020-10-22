@@ -12,6 +12,7 @@ public class Transaction {
     private OfferSellBuyLimit offerSellBuyLimitByOfferSellBuyLimitId;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

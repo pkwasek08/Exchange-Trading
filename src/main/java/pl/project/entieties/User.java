@@ -17,10 +17,10 @@ public class User {
     private String login;
     private String password;
     private Integer securityCode;
-    private Integer depositId;
     private Deposit depositByDepositId;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -130,16 +130,6 @@ public class User {
         this.securityCode = securityCode;
     }
 
-    @Basic
-    @Column(name = "deposit_id", nullable = true)
-    public Integer getDepositId() {
-        return depositId;
-    }
-
-    public void setDepositId(Integer depositId) {
-        this.depositId = depositId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -159,7 +149,6 @@ public class User {
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (securityCode != null ? !securityCode.equals(user.securityCode) : user.securityCode != null) return false;
-        if (depositId != null ? !depositId.equals(user.depositId) : user.depositId != null) return false;
 
         return true;
     }
@@ -177,7 +166,6 @@ public class User {
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (securityCode != null ? securityCode.hashCode() : 0);
-        result = 31 * result + (depositId != null ? depositId.hashCode() : 0);
         return result;
     }
 

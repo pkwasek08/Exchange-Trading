@@ -12,7 +12,7 @@ services:
       - 5432:5432
 
   dt-api:
-    image: pkwasek/et-api:2.0
+    image: pkwasek/et-api:4.1
     environment:
       - DB_SERVER=postgres
       - POSTGRES_DB=exchange
@@ -22,7 +22,7 @@ services:
       - 8080:8080
 
   et-app:
-    image: pkwasek/et-angular-app:3.0
+    image: pkwasek/et-angular-app:4.0
     container_name: et-app-angular
     ports:
       - 4200:80
