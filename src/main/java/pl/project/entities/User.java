@@ -1,4 +1,4 @@
-package pl.project.entieties;
+package pl.project.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,7 +17,6 @@ public class User {
     private String login;
     private String password;
     private Integer securityCode;
-    private Deposit depositByDepositId;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -169,13 +168,4 @@ public class User {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "deposit_id", referencedColumnName = "id",  insertable =false, updatable =false)
-    public Deposit getDepositByDepositId() {
-        return depositByDepositId;
-    }
-
-    public void setDepositByDepositId(Deposit depositByDepositId) {
-        this.depositByDepositId = depositByDepositId;
-    }
 }

@@ -2,7 +2,7 @@ package pl.project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.project.entieties.Deposit;
+import pl.project.entities.Deposit;
 import pl.project.services.DepositService;
 
 import java.util.List;

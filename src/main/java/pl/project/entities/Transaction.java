@@ -1,4 +1,4 @@
-package pl.project.entieties;
+package pl.project.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,6 +10,7 @@ public class Transaction {
     private Timestamp date;
     private OfferSellBuy offerSellBuyByOfferSellBuyId;
     private OfferSellBuyLimit offerSellBuyLimitByOfferSellBuyLimitId;
+    private Deposit deposit;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -60,6 +61,16 @@ public class Transaction {
 
     public void setOfferSellBuyByOfferSellBuyId(OfferSellBuy offerSellBuyByOfferSellBuyId) {
         this.offerSellBuyByOfferSellBuyId = offerSellBuyByOfferSellBuyId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "deposit_id", referencedColumnName = "id")
+    public Deposit getDepositByDepositId() {
+        return deposit;
+    }
+
+    public void setDepositByDepositId(Deposit depositByDespositId) {
+        this.deposit = depositByDespositId;
     }
 
     @ManyToOne

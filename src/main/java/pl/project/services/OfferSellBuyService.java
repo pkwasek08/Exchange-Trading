@@ -2,7 +2,7 @@ package pl.project.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.entieties.OfferSellBuy;
+import pl.project.entities.OfferSellBuy;
 import pl.project.repositories.OfferSellBuyRepository;
 
 import java.util.ArrayList;

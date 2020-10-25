@@ -2,7 +2,7 @@ package pl.project.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.entieties.Companie;
+import pl.project.entities.Companie;
 import pl.project.repositories.CompanieRepository;
 
 import java.util.ArrayList;

@@ -12,7 +12,7 @@ services:
       - 5432:5432
 
   dt-api:
-    image: pkwasek/et-api:4.1
+    image: pkwasek/et-api:4.3
     environment:
       - DB_SERVER=postgres
       - POSTGRES_DB=exchange

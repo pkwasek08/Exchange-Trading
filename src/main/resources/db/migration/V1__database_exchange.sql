@@ -22,7 +22,8 @@ CREATE TABLE "transactions" (
                                 "id" SERIAL PRIMARY KEY,
                                 "offer_sell_buy_id" integer,
                                 "offer_sell_buy_limit_id" integer,
-                                "date" timestamp
+                                "date" timestamp,
+                                "deposit_id" integer
 );
 
 DROP TABLE IF EXISTS "companies_statistics" CASCADE;
@@ -41,7 +42,7 @@ DROP TABLE IF EXISTS "deposits" CASCADE;
 CREATE TABLE "deposits" (
                             "id" SERIAL PRIMARY KEY,
                             "cash" numeric(10, 2),
-                            "transaction_id" integer
+                            "user_id" integer
 );
 
 DROP TABLE IF EXISTS "users" CASCADE;
@@ -56,8 +57,7 @@ CREATE TABLE "users" (
                          "country" varchar,
                          "login" varchar,
                          "password" varchar,
-                         "security_code" integer,
-                         "deposit_id" int
+                         "security_code" integer
 );
 
 DROP TABLE IF EXISTS "offers_sell_buy" CASCADE;
@@ -70,7 +70,7 @@ CREATE TABLE "offers_sell_buy" (
 );
 
 
-ALTER TABLE "users" ADD FOREIGN KEY ("deposit_id") REFERENCES "deposits" ("id");
+ALTER TABLE "deposits" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "offers_sell_buy" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
 
@@ -80,6 +80,6 @@ ALTER TABLE "transactions" ADD FOREIGN KEY ("offer_sell_buy_limit_id") REFERENCE
 
 ALTER TABLE "offers_sell_buy_limit" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
 
-ALTER TABLE "deposits" ADD FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id");
+ALTER TABLE "transactions" ADD FOREIGN KEY ("deposit_id") REFERENCES "deposits" ("id");
 
 ALTER TABLE "companies_statistics" ADD FOREIGN KEY ("companie_id") REFERENCES "companies" ("id");

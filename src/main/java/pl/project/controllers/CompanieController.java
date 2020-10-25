@@ -2,7 +2,7 @@ package pl.project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.project.entieties.Companie;
+import pl.project.entities.Companie;
 import pl.project.services.CompanieService;
 
 import java.util.List;

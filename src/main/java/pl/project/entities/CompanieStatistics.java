@@ -1,4 +1,4 @@
-package pl.project.entieties;
+package pl.project.entities;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,9 +14,10 @@ public class CompanieStatistics {
     private BigDecimal maxPrice;
     private BigDecimal minPrice;
     private BigDecimal trendValue;
+    private Companie companie;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -114,5 +115,16 @@ public class CompanieStatistics {
         result = 31 * result + (minPrice != null ? minPrice.hashCode() : 0);
         result = 31 * result + (trendValue != null ? trendValue.hashCode() : 0);
         return result;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "companie_id", referencedColumnName = "id", insertable = false, updatable = false)
+    public Companie getCompanieByCompanieId() {
+        return companie;
+    }
+
+    public void setCompanieByCompanieId(Companie companiesByCompanieId) {
+        this.companie = companiesByCompanieId;
     }
 }

@@ -2,7 +2,7 @@ package pl.project.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.entieties.OfferSellBuyLimit;
+import pl.project.entities.OfferSellBuyLimit;
 import pl.project.repositories.OfferSellBuyLimitRepository;
 
 import java.util.ArrayList;

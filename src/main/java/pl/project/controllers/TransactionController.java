@@ -2,7 +2,7 @@ package pl.project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.project.entieties.Transaction;
+import pl.project.entities.Transaction;
 import pl.project.services.TransactionService;
 
 import java.util.List;
