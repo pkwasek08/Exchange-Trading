@@ -119,7 +119,7 @@ public class CompanieStatistics {
 
 
     @ManyToOne
-    @JoinColumn(name = "companie_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "companie_id", referencedColumnName = "id")
     public Companie getCompanieByCompanieId() {
         return companie;
     }

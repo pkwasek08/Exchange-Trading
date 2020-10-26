@@ -3,7 +3,7 @@ package pl.project.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.entities.Deposit;
-import pl.project.repositories.DepositRepository;
+import pl.project.repositoriesCRUD.DepositRepository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package pl.project.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.entities.Transaction;
-import pl.project.repositories.TransactionRepository;
+import pl.project.repositoriesCRUD.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;

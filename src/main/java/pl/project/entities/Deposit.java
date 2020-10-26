@@ -53,7 +53,7 @@ public class Deposit {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     public User getUserByUserId() {
         return user;
     }
