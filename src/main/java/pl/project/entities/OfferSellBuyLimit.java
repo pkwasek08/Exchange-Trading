@@ -1,17 +1,15 @@
 package pl.project.entities;
-
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "offers_Sell_Buy_Limit")
 public class OfferSellBuyLimit {
     private int id;
     private Integer amount;
-    private BigDecimal price;
-    private BigDecimal limit;
+    private Float price;
     private String type;
-    private Companie companiesByCompanyId;
+    private Float limit;
+    private Companie companie;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,22 +33,22 @@ public class OfferSellBuyLimit {
     }
 
     @Basic
-    @Column(name = "price", nullable = true, precision = 2)
-    public BigDecimal getPrice() {
+    @Column(name = "price", nullable = true, precision = 0)
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
     @Basic
-    @Column(name = "limit", nullable = true, precision = 2)
-    public BigDecimal getLimit() {
+    @Column(name = "limit_price", nullable = true, precision = 0)
+    public Float getLimit() {
         return limit;
     }
 
-    public void setLimit(BigDecimal limit) {
+    public void setLimit(Float limit) {
         this.limit = limit;
     }
 
@@ -90,13 +88,25 @@ public class OfferSellBuyLimit {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "company_id", referencedColumnName = "id")
-    public Companie getCompaniesByCompanyId() {
-        return companiesByCompanyId;
+    public Companie getCompanie() {
+        return companie;
     }
 
-    public void setCompaniesByCompanyId(Companie companiesByCompanyId) {
-        this.companiesByCompanyId = companiesByCompanyId;
+    public void setCompanie(Companie companiesByCompanyId) {
+        this.companie = companiesByCompanyId;
+    }
+
+    @Override
+    public String toString() {
+        return "OfferSellBuyLimit{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", price=" + price +
+                ", limit=" + limit +
+                ", type='" + type + '\'' +
+                ", companie=" + companie +
+                '}';
     }
 }

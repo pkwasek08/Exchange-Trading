@@ -1,5 +1,7 @@
 package pl.project.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.project.entities.OfferSellBuyLimit;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @RestController
 public class OfferSellBuyLimitController {
+    Logger log = LogManager.getLogger(this.getClass());
+
     @Autowired
     private OfferSellBuyLimitService offerSellBuyLimitService;
 
@@ -27,6 +31,7 @@ public class OfferSellBuyLimitController {
     @PostMapping(value = "/offerSellBuyLimit")
     @CrossOrigin(origins = "*")
     public void addOfferSellBuyLimit(@RequestBody OfferSellBuyLimit offerSellBuyLimit) {
+        log.info("&&&&&&& " + offerSellBuyLimit.toString());
         offerSellBuyLimitService.addOfferSellBuyLimit(offerSellBuyLimit);
     }
 

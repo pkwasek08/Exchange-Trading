@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.project.entities.Deposit;
 
 @Repository
-public interface DepositRepository extends CrudRepository<Deposit, Integer> {
+public interface DepositCRUDRepository extends CrudRepository<Deposit, Integer> {
 }

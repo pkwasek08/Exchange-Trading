@@ -9,17 +9,15 @@ public class User {
     private int id;
     private String name;
     private String lastname;
-    private Integer accountNumber;
     private String email;
-    private Timestamp createdAt;
+    private Timestamp created_at;
     private Timestamp birthday;
     private String country;
     private String login;
     private String password;
-    private Integer securityCode;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -50,16 +48,6 @@ public class User {
     }
 
     @Basic
-    @Column(name = "account_number", nullable = true)
-    public Integer getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Integer accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    @Basic
     @Column(name = "email", nullable = true, length = -1)
     public String getEmail() {
         return email;
@@ -71,12 +59,12 @@ public class User {
 
     @Basic
     @Column(name = "created_at", nullable = true)
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public Timestamp getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(Timestamp createdAt) {
+        this.created_at = createdAt;
     }
 
     @Basic
@@ -119,16 +107,6 @@ public class User {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "security_code", nullable = true)
-    public Integer getSecurityCode() {
-        return securityCode;
-    }
-
-    public void setSecurityCode(Integer securityCode) {
-        this.securityCode = securityCode;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,15 +117,12 @@ public class User {
         if (id != user.id) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (lastname != null ? !lastname.equals(user.lastname) : user.lastname != null) return false;
-        if (accountNumber != null ? !accountNumber.equals(user.accountNumber) : user.accountNumber != null)
-            return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (createdAt != null ? !createdAt.equals(user.createdAt) : user.createdAt != null) return false;
+        if (created_at != null ? !created_at.equals(user.created_at) : user.created_at != null) return false;
         if (birthday != null ? !birthday.equals(user.birthday) : user.birthday != null) return false;
         if (country != null ? !country.equals(user.country) : user.country != null) return false;
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (securityCode != null ? !securityCode.equals(user.securityCode) : user.securityCode != null) return false;
 
         return true;
     }
@@ -157,15 +132,27 @@ public class User {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
-        result = 31 * result + (accountNumber != null ? accountNumber.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + (created_at != null ? created_at.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (securityCode != null ? securityCode.hashCode() : 0);
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt=" + created_at +
+                ", birthday=" + birthday +
+                ", country='" + country + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

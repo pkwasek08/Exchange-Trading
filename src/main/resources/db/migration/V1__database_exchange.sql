@@ -2,10 +2,10 @@ DROP TABLE IF EXISTS "offers_sell_buy_limit" CASCADE;
 CREATE TABLE "offers_sell_buy_limit" (
                                          "id" SERIAL PRIMARY KEY,
                                          "amount" integer,
-                                         "price" numeric(10, 2),
-                                         "limit" numeric(10, 2),
+                                         "price" real,
                                          "company_id" integer,
-                                         "type" varchar
+                                         "type" varchar,
+                                         "limit_price" real
 );
 
 DROP TABLE IF EXISTS "companies" CASCADE;
@@ -50,14 +50,12 @@ CREATE TABLE "users" (
                          "id" SERIAL PRIMARY KEY,
                          "name" varchar,
                          "lastname" varchar,
-                         "account_number" numeric(26, 0),
                          "email" varchar,
                          "created_at" timestamp,
                          "birthday" timestamp,
                          "country" varchar,
                          "login" varchar,
-                         "password" varchar,
-                         "security_code" integer
+                         "password" varchar
 );
 
 DROP TABLE IF EXISTS "offers_sell_buy" CASCADE;

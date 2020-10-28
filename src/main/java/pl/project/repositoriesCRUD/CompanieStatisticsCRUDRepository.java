@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CompanieStatisticsCRUDRepository extends CrudRepository<CompanieStatistics, Integer> {
-    @Query(value = "SELECT cs FROM CompanieStatistics cs WHERE cs.companieByCompanieId.id = :companieId")
+    @Query(value = "SELECT cs FROM CompanieStatistics cs WHERE cs.companieByCompanieId.id = :companieId ORDER BY cs.id DESC ")
     List<CompanieStatistics> findAllByCompanieId(@Param("companieId") Integer companieId);
 }

@@ -9,7 +9,7 @@ public class OfferSellBuy {
     private Integer amount;
     private Float price;
     private String type;
-    private Companie companieByCompanyId;
+    private Companie companie;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -78,11 +78,23 @@ public class OfferSellBuy {
 
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
-    public Companie getCompanieByCompanyId() {
-        return companieByCompanyId;
+    public Companie getCompanie() {
+        return companie;
     }
 
-    public void setCompanieByCompanyId(Companie companieByCompanyId) {
-        this.companieByCompanyId = companieByCompanyId;
+    public void setCompanie(Companie companieByCompanyId) {
+        this.companie = companieByCompanyId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "OfferSellBuy{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", price=" + price +
+                ", type='" + type + '\'' +
+                ", companieByCompanyId=" + companie +
+                '}';
     }
 }
