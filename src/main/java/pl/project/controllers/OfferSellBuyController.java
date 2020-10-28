@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.project.entities.OfferSellBuy;
 import pl.project.services.OfferSellBuyService;
-
 import java.util.List;
 
 @RestController

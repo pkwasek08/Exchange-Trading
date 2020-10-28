@@ -1,5 +1,6 @@
 package pl.project.entities;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "offers_Sell_Buy_Limit")
@@ -9,7 +10,10 @@ public class OfferSellBuyLimit {
     private Float price;
     private String type;
     private Float limit;
+    private Date date;
     private Companie companie;
+    private User user;
+    private boolean active;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -62,6 +66,27 @@ public class OfferSellBuyLimit {
         this.type = type;
     }
 
+    @Basic
+    @Column(name = "active", nullable = true)
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Basic
+    @Column(name = "date", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +99,7 @@ public class OfferSellBuyLimit {
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (limit != null ? !limit.equals(that.limit) : that.limit != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
     }
@@ -85,10 +111,11 @@ public class OfferSellBuyLimit {
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (limit != null ? limit.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     public Companie getCompanie() {
         return companie;
@@ -96,6 +123,17 @@ public class OfferSellBuyLimit {
 
     public void setCompanie(Companie companiesByCompanyId) {
         this.companie = companiesByCompanyId;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -106,7 +144,10 @@ public class OfferSellBuyLimit {
                 ", price=" + price +
                 ", limit=" + limit +
                 ", type='" + type + '\'' +
+                ", date='" + date +
+                ", active='" + active +
                 ", companie=" + companie +
+                ", user=" + user +
                 '}';
     }
 }

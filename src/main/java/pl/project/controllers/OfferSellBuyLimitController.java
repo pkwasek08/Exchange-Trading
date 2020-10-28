@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.project.entities.OfferSellBuyLimit;
 import pl.project.services.OfferSellBuyLimitService;
-
 import java.util.List;
 
 @RestController
@@ -31,7 +30,6 @@ public class OfferSellBuyLimitController {
     @PostMapping(value = "/offerSellBuyLimit")
     @CrossOrigin(origins = "*")
     public void addOfferSellBuyLimit(@RequestBody OfferSellBuyLimit offerSellBuyLimit) {
-        log.info("&&&&&&& " + offerSellBuyLimit.toString());
         offerSellBuyLimitService.addOfferSellBuyLimit(offerSellBuyLimit);
     }
 

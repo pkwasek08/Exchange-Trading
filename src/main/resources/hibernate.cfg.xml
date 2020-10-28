@@ -10,7 +10,6 @@
         <mapping class="pl.project.entities.Deposit"/>
         <mapping class="pl.project.entities.OfferSellBuy"/>
         <mapping class="pl.project.entities.OfferSellBuyLimit"/>
-        <mapping class="pl.project.entities.Transaction"/>
         <mapping class="pl.project.entities.User"/>
         <mapping class="pl.project.entities.Companie"/>
     </session-factory>

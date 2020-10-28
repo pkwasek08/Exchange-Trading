@@ -1,11 +1,9 @@
 package pl.project.repositories;
 
 import org.springframework.stereotype.Repository;
-import pl.project.entities.Deposit;
-import pl.project.entities.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 
 @Repository
@@ -14,7 +12,11 @@ public class UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    /*public void addUser(User user) {
-        entityManager.createQuery("SELECT d FROM Deposit d WHERE d.userByUserId.id = :userId").setParameter("userId",userId).setMaxResults(1).getSingleResult();
-    }*/
+    @Transactional
+    public void settleMoneyUser(Integer userId, Float cash) {
+        entityManager.createQuery("UPDATE User SET cash = :cash WHERE id = :id")
+                .setParameter("cash", cash)
+                .setParameter("id", userId)
+                .executeUpdate();
+    }
 }

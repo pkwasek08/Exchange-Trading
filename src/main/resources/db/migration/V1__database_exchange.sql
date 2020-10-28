@@ -1,13 +1,3 @@
-DROP TABLE IF EXISTS "offers_sell_buy_limit" CASCADE;
-CREATE TABLE "offers_sell_buy_limit" (
-                                         "id" SERIAL PRIMARY KEY,
-                                         "amount" integer,
-                                         "price" real,
-                                         "company_id" integer,
-                                         "type" varchar,
-                                         "limit_price" real
-);
-
 DROP TABLE IF EXISTS "companies" CASCADE;
 CREATE TABLE "companies" (
                              "id" SERIAL PRIMARY KEY,
@@ -17,14 +7,6 @@ CREATE TABLE "companies" (
                              "capital" numeric(16, 2)
 );
 
-DROP TABLE IF EXISTS "transactions" CASCADE;
-CREATE TABLE "transactions" (
-                                "id" SERIAL PRIMARY KEY,
-                                "offer_sell_buy_id" integer,
-                                "offer_sell_buy_limit_id" integer,
-                                "date" timestamp,
-                                "deposit_id" integer
-);
 
 DROP TABLE IF EXISTS "companies_statistics" CASCADE;
 CREATE TABLE "companies_statistics" (
@@ -38,13 +20,6 @@ CREATE TABLE "companies_statistics" (
                                         "companie_id" integer
 );
 
-DROP TABLE IF EXISTS "deposits" CASCADE;
-CREATE TABLE "deposits" (
-                            "id" SERIAL PRIMARY KEY,
-                            "cash" numeric(10, 2),
-                            "user_id" integer
-);
-
 DROP TABLE IF EXISTS "users" CASCADE;
 CREATE TABLE "users" (
                          "id" SERIAL PRIMARY KEY,
@@ -53,9 +28,9 @@ CREATE TABLE "users" (
                          "email" varchar,
                          "created_at" timestamp,
                          "birthday" timestamp,
-                         "country" varchar,
                          "login" varchar,
-                         "password" varchar
+                         "password" varchar,
+                         "cash" numeric(10, 2)
 );
 
 DROP TABLE IF EXISTS "offers_sell_buy" CASCADE;
@@ -64,20 +39,32 @@ CREATE TABLE "offers_sell_buy" (
                                    "amount" integer,
                                    "price" real,
                                    "company_id" integer,
-                                   "type" varchar
+                                   "type" varchar,
+                                   "date" timestamp,
+                                   "user_id" integer,
+                                   "active" boolean
+);
+
+DROP TABLE IF EXISTS "offers_sell_buy_limit" CASCADE;
+CREATE TABLE "offers_sell_buy_limit" (
+                                         "id" SERIAL PRIMARY KEY,
+                                         "amount" integer,
+                                         "price" real,
+                                         "company_id" integer,
+                                         "type" varchar,
+                                         "limit_price" real,
+                                         "date" timestamp,
+                                         "user_id" integer,
+                                         "active" boolean
 );
 
 
-ALTER TABLE "deposits" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-
 ALTER TABLE "offers_sell_buy" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
 
-ALTER TABLE "transactions" ADD FOREIGN KEY ("offer_sell_buy_id") REFERENCES "offers_sell_buy" ("id");
+ALTER TABLE "offers_sell_buy" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "transactions" ADD FOREIGN KEY ("offer_sell_buy_limit_id") REFERENCES "offers_sell_buy_limit" ("id");
+ALTER TABLE "offers_sell_buy_limit" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "offers_sell_buy_limit" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
-
-ALTER TABLE "transactions" ADD FOREIGN KEY ("deposit_id") REFERENCES "deposits" ("id");
 
 ALTER TABLE "companies_statistics" ADD FOREIGN KEY ("companie_id") REFERENCES "companies" ("id");

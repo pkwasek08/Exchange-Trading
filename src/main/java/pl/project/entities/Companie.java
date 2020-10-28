@@ -13,7 +13,7 @@ public class Companie {
     private String name;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -87,5 +87,16 @@ public class Companie {
         result = 31 * result + (capital != null ? capital.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Companie{" +
+                "id=" + id +
+                ", industry='" + industry + '\'' +
+                ", revenue=" + revenue +
+                ", capital=" + capital +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

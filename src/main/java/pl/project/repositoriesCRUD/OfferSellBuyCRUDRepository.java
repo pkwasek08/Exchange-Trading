@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.project.entities.OfferSellBuy;
 
 @Repository
-public interface OfferSellBuyRepository extends CrudRepository<OfferSellBuy, Integer> {
+public interface OfferSellBuyCRUDRepository extends CrudRepository<OfferSellBuy, Integer> {
 }

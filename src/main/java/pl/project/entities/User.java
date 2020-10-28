@@ -12,12 +12,12 @@ public class User {
     private String email;
     private Timestamp created_at;
     private Timestamp birthday;
-    private String country;
     private String login;
     private String password;
+    private Float cash;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -58,6 +58,17 @@ public class User {
     }
 
     @Basic
+    @Column(name = "cash", nullable = true)
+    public Float getCash() {
+        return cash;
+    }
+
+    public void setCash(Float cash) {
+        this.cash = cash;
+    }
+
+
+    @Basic
     @Column(name = "created_at", nullable = true)
     public Timestamp getCreated_at() {
         return created_at;
@@ -75,16 +86,6 @@ public class User {
 
     public void setBirthday(Timestamp birthday) {
         this.birthday = birthday;
-    }
-
-    @Basic
-    @Column(name = "country", nullable = true, length = -1)
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     @Basic
@@ -118,9 +119,9 @@ public class User {
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (lastname != null ? !lastname.equals(user.lastname) : user.lastname != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (cash != null ? !cash.equals(user.cash) : user.cash != null) return false;
         if (created_at != null ? !created_at.equals(user.created_at) : user.created_at != null) return false;
         if (birthday != null ? !birthday.equals(user.birthday) : user.birthday != null) return false;
-        if (country != null ? !country.equals(user.country) : user.country != null) return false;
         if (login != null ? !login.equals(user.login) : user.login != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
 
@@ -135,9 +136,9 @@ public class User {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (created_at != null ? created_at.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (login != null ? login.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (cash != null ? cash.hashCode() : 0);
         return result;
     }
 
@@ -149,8 +150,8 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", email='" + email + '\'' +
                 ", createdAt=" + created_at +
+                ", cash=" + cash +
                 ", birthday=" + birthday +
-                ", country='" + country + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 '}';

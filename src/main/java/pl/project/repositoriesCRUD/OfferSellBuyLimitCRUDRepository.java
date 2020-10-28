@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.project.entities.OfferSellBuyLimit;
 
 @Repository
-public interface OfferSellBuyLimitRepository extends CrudRepository<OfferSellBuyLimit, Integer> {
+public interface OfferSellBuyLimitCRUDRepository extends CrudRepository<OfferSellBuyLimit, Integer> {
 }

@@ -1,6 +1,7 @@
 package pl.project.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "offers_Sell_Buy")
@@ -9,7 +10,10 @@ public class OfferSellBuy {
     private Integer amount;
     private Float price;
     private String type;
+    private Date date;
     private Companie companie;
+    private User user;
+    private boolean active;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -52,6 +56,28 @@ public class OfferSellBuy {
         this.type = type;
     }
 
+    @Basic
+    @Column(name = "active", nullable = true)
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
+    @Basic
+    @Column(name = "date", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,6 +89,7 @@ public class OfferSellBuy {
         if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
     }
@@ -73,6 +100,7 @@ public class OfferSellBuy {
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
@@ -82,10 +110,19 @@ public class OfferSellBuy {
         return companie;
     }
 
-    public void setCompanie(Companie companieByCompanyId) {
-        this.companie = companieByCompanyId;
+    public void setCompanie(Companie companie) {
+        this.companie = companie;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
@@ -94,7 +131,10 @@ public class OfferSellBuy {
                 ", amount=" + amount +
                 ", price=" + price +
                 ", type='" + type + '\'' +
-                ", companieByCompanyId=" + companie +
+                ", date='" + date +
+                ", active='" + active +
+                ", companie=" + companie +
+                ", user=" + user +
                 '}';
     }
 }
