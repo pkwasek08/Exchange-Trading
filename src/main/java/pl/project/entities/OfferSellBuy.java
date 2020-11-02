@@ -6,7 +6,7 @@ import java.util.Date;
 @Entity
 @Table(name = "offers_Sell_Buy")
 public class OfferSellBuy {
-    private int id;
+    private Long id;
     private Integer amount;
     private Float price;
     private String type;
@@ -18,11 +18,11 @@ public class OfferSellBuy {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -85,7 +85,7 @@ public class OfferSellBuy {
 
         OfferSellBuy that = (OfferSellBuy) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
@@ -96,7 +96,7 @@ public class OfferSellBuy {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = (id != null ? id.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);

@@ -8,31 +8,32 @@ import pl.project.services.CompanieService;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/companie")
 public class CompanieController {
     @Autowired
     private CompanieService companieService;
 
-    @GetMapping("/companie")
+    @GetMapping()
     public List<Companie> getAllCompanie() {
         return companieService.getAllCompanie();
     }
 
-    @GetMapping("/companie/{id}")
+    @GetMapping("/{id}")
     public Companie getCity(@PathVariable Integer id) {
         return companieService.getCompanie(id);
     }
 
-    @PostMapping(value = "/companie")
+    @PostMapping()
     public void addCity(@RequestBody Companie companie) {
         companieService.addCompanie(companie);
     }
 
-    @PutMapping(value = "/companie/{id}")
+    @PutMapping(value = "/{id}")
     public void updateCity(@RequestBody Companie companie, @PathVariable Integer id) {
         companieService.updateCompanie(id, companie);
     }
 
-    @DeleteMapping(value = "/companie/{id}")
+    @DeleteMapping(value = "/{id}")
     public void deleteCity(@PathVariable Integer id) {
         companieService.deleteCompanie(id);
     }

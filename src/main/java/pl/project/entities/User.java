@@ -17,7 +17,7 @@ public class User {
     private Float cash;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -155,5 +155,17 @@ public class User {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public void setUser(User user) {
+        this.id = user.id;
+        this.name = user.name;
+        this.lastname = user.lastname;
+        this.email = user.email;
+        this.created_at = user.created_at;
+        this.birthday = user.birthday;
+        this.login = user.login;
+        this.password = user.password;
+        this.cash = user.cash;
     }
 }

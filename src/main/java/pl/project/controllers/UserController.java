@@ -10,42 +10,43 @@ import pl.project.services.UserService;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/user")
 public class UserController {
     Logger log = LogManager.getLogger(this.getClass());
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping()
     @CrossOrigin(origins = "*")
-    public List<User> getUser() {
+    public List<User> getAllUser() {
         return userService.getAllUser();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     @CrossOrigin(origins = "*")
     public User getUser(@PathVariable Integer id) {
         return userService.getUser(id);
     }
 
-    @RequestMapping("/user/login")
+    @RequestMapping("/login")
     @CrossOrigin(origins = "*")
     public User getUserByEmailAndPassword(@RequestParam String email, @RequestParam String password) {
         return userService.getUserByEmailAndPassword(email, password);
     }
 
-    @PostMapping(value = "/user")
+    @PostMapping()
     @CrossOrigin(origins = "*")
     public void addUser(@RequestBody User user) {
         userService.addUser(user);
     }
 
-    @PutMapping(value = "/user/{id}")
+    @PutMapping(value = "/{id}")
     @CrossOrigin(origins = "*")
     public void updateUser(@RequestBody User user, @PathVariable Integer id) {
         userService.updateUser(id, user);
     }
 
-    @DeleteMapping(value = "/user/{id}")
+    @DeleteMapping(value = "/{id}")
     @CrossOrigin(origins = "*")
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

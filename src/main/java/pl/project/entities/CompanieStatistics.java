@@ -1,19 +1,18 @@
 package pl.project.entities;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "companies_Statistics")
 public class CompanieStatistics {
     private int id;
-    private BigDecimal price;
+    private Float price;
     private Timestamp date;
     private Integer volume;
-    private BigDecimal maxPrice;
-    private BigDecimal minPrice;
-    private BigDecimal trendValue;
+    private Float maxPrice;
+    private Float minPrice;
+    private Float trendValue;
     private Companie companie;
 
     @Id
@@ -29,11 +28,11 @@ public class CompanieStatistics {
 
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
-    public BigDecimal getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
@@ -59,31 +58,31 @@ public class CompanieStatistics {
 
     @Basic
     @Column(name = "max_price", nullable = true, precision = 2)
-    public BigDecimal getMaxPrice() {
+    public Float getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(BigDecimal maxPrice) {
+    public void setMaxPrice(Float maxPrice) {
         this.maxPrice = maxPrice;
     }
 
     @Basic
     @Column(name = "min_price", nullable = true, precision = 2)
-    public BigDecimal getMinPrice() {
+    public Float getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(BigDecimal minPrice) {
+    public void setMinPrice(Float minPrice) {
         this.minPrice = minPrice;
     }
 
     @Basic
     @Column(name = "trend_value", nullable = true, precision = 2)
-    public BigDecimal getTrendValue() {
+    public Float getTrendValue() {
         return trendValue;
     }
 
-    public void setTrendValue(BigDecimal trendValue) {
+    public void setTrendValue(Float trendValue) {
         this.trendValue = trendValue;
     }
 

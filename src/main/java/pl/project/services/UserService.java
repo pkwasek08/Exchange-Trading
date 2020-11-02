@@ -3,6 +3,7 @@ package pl.project.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.entities.User;
+import pl.project.repositories.UserRepository;
 import pl.project.repositoriesCRUD.UserCRUDRepository;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserCRUDRepository userCRUDRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public List<User> getAllUser() {
         List<User> users = new ArrayList<>();
@@ -38,6 +41,9 @@ public class UserService {
         userCRUDRepository.save(user);
     }
 
+    public void settleUserMoney(Integer userId, Float money) {
+        userRepository.settleMoneyUser(userId, money);
+    }
 
     public void deleteUser(Integer id) {
         userCRUDRepository.deleteById(id);
