@@ -52,7 +52,7 @@ public class OfferSellBuyLimitRepository {
 
     public List<OfferLimitDTO> findAllOfferSellLimitByCompanieId(Integer companieId) {
         String sql = "SELECT NEW pl.project.dto.OfferLimitDTO(o.price, sum(o.amount))" +
-                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE GROUP BY o.price ORDER BY o.price ASC";
+                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE GROUP BY o.price ORDER BY o.price DESC";
         return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 }

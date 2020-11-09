@@ -2,6 +2,7 @@ package pl.project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.project.dto.UserStockDTO;
 import pl.project.entities.Stock;
 import pl.project.services.StockService;
 
@@ -30,6 +31,12 @@ public class StockController {
     @CrossOrigin(origins = "*")
     public List<Stock> getAllStockByUserId(@RequestParam Integer userId) {
         return stockService.getAllStockByUserId(userId);
+    }
+
+    @GetMapping("/view/user")
+    @CrossOrigin(origins = "*")
+    public List<UserStockDTO> getAllStockByUserIdTableView(@RequestParam Integer userId) {
+        return stockService.getAllStockByUserIdTableView(userId);
     }
 
     @GetMapping("/user/company")

@@ -11,7 +11,7 @@ public class CompanieStatisticsRepository{
     private EntityManager entityManager;
 
     public CompanieStatistics findByCompanieIdLatest(int companieId) {
-        return entityManager.createQuery("SELECT cs FROM CompanieStatistics cs WHERE cs.companieByCompanieId.id = :companieId ORDER BY cs.id DESC",
+        return entityManager.createQuery("SELECT cs FROM CompanieStatistics cs WHERE cs.companieByCompanieId.id = :companieId ORDER BY cs.date DESC",
                 CompanieStatistics.class).setParameter("companieId",companieId).setMaxResults(1).getSingleResult();
     }
 }

@@ -4,9 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.entities.Companie;
-import pl.project.entities.Stock;
-import pl.project.entities.User;
+import pl.project.dto.UserStockDTO;
+import pl.project.entities.*;
 import pl.project.repositoriesCRUD.StockRepository;
 
 import java.util.ArrayList;
@@ -19,6 +18,12 @@ public class StockService {
     @Autowired
     private StockRepository stockRepository;
 
+    @Autowired
+    private CompanieStatisticsService companieStatisticsService;
+
+    @Autowired
+    private OfferSellBuyLimitService offerSellBuyLimitService;
+
     public List<Stock> getAllStock() {
         List<Stock> users = new ArrayList<>();
         stockRepository.findAll().forEach(users::add);
@@ -27,6 +32,20 @@ public class StockService {
 
     public List<Stock> getAllStockByUserId(Integer userId) {
         return stockRepository.findAllByUser_Id(userId);
+    }
+
+    public List<UserStockDTO> getAllStockByUserIdTableView(Integer userId){
+        List<Stock> stockUserList = getAllStockByUserId(userId);
+        List<UserStockDTO> userStockViewList = new ArrayList<>();
+        stockUserList.stream().forEach(stock -> {
+            UserStockDTO userStockDTO = new UserStockDTO(stock.getCompany().getName(), stock.getCompany().getIndustry(), stock.getAmount());
+            CompanieStatistics companieStatistics = companieStatisticsService.getCompanieStatisticsByCompanieIdLatest(stock.getCompany().getId());
+            userStockDTO.setActualPrice(companieStatistics.getPrice());
+            userStockDTO.setTrend(companieStatistics.getTrendValue());
+            userStockDTO.setActualPrice(getCurrentPriceStockUser(stock.getCompany().getId(), stock.getAmount()));
+            userStockViewList.add(userStockDTO);
+        });
+        return userStockViewList;
     }
 
     public Stock getStockByUserIdAndCompanieId(Integer userId, Integer companieId) {
@@ -75,5 +94,23 @@ public class StockService {
         } else {
             deleteStock(stock.getId());
         }
+    }
+
+    private Float getCurrentPriceStockUser(Integer companyId, int amountStockUser){
+        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(companyId, "Buy");
+        Float valueStockUser = 0f;
+        int amountStock = amountStockUser;
+        for (OfferSellBuyLimit offerLimit : offerLimitList) {
+            if (amountStock != 0) {
+                if (offerLimit.getAmount() >= amountStockUser) {
+                    valueStockUser += amountStock * offerLimit.getPrice();
+                    amountStock = 0;
+                } else {
+                    valueStockUser += offerLimit.getAmount() * offerLimit.getPrice();
+                    amountStock -= offerLimit.getAmount();
+                }
+            }
+        }
+        return valueStockUser;
     }
 }

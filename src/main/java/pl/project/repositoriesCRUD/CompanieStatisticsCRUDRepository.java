@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface CompanieStatisticsCRUDRepository extends CrudRepository<CompanieStatistics, Integer> {
-    List<CompanieStatistics> findAllByCompanie_Id(int id);
+    List<CompanieStatistics> findAllByCompanie_IdOrderByDateDesc(int id);
 
-    CompanieStatistics findFirstByCompanie_IdOrderByIdDesc(int id);
+    CompanieStatistics findFirstByCompanie_IdOrderByDateDesc(int id);
 }

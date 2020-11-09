@@ -36,11 +36,11 @@ public class CompanieStatisticsService {
     }
 
     public List<CompanieStatistics> getCompanieStatisticsByCompanieId(Integer companyId) {
-        return companieStatisticsCRUDRepository.findAllByCompanie_Id(companyId);
+        return companieStatisticsCRUDRepository.findAllByCompanie_IdOrderByDateDesc(companyId);
     }
 
     public CompanieStatistics getCompanieStatisticsByCompanieIdLatest(Integer companyId) {
-         CompanieStatistics companieStatistics = companieStatisticsCRUDRepository.findFirstByCompanie_IdOrderByIdDesc(companyId);
+         CompanieStatistics companieStatistics = companieStatisticsCRUDRepository.findFirstByCompanie_IdOrderByDateDesc(companyId);
          if(companieStatistics != null){
              return companieStatistics;
          } else {
