@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface OfferSellBuyCRUDRepository extends CrudRepository<OfferSellBuy, Integer> {
     List<OfferSellBuy> findAllByUserId(Integer id);
+
 }

@@ -1,6 +1,5 @@
 package pl.project.repositories;
 
-import com.mysql.cj.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -20,20 +19,6 @@ public class OfferSellBuyLimitRepository {
     private EntityManager entityManager;
 
     @Transactional
-    public int addOfferSellBuy(OfferSellBuyLimit offerSellBuyLimit) {
-        return entityManager.createNativeQuery("INSERT INTO offers_sell_buy_limit(amount, price, type, date, limit_price, company_id, user_id, active) VALUES (?,?,?,?,?,?,?,?)")
-                .setParameter(1, offerSellBuyLimit.getAmount())
-                .setParameter(2, offerSellBuyLimit.getPrice())
-                .setParameter(3, offerSellBuyLimit.getType())
-                .setParameter(4, offerSellBuyLimit.getDate())
-                .setParameter(5, offerSellBuyLimit.getLimit())
-                .setParameter(6, offerSellBuyLimit.getCompanie().getId())
-                .setParameter(7, offerSellBuyLimit.getUser().getId())
-                .setParameter(8, offerSellBuyLimit.getActive())
-                .executeUpdate();
-    }
-
-    @Transactional
     public void updateOfferSellBuy(OfferSellBuyLimit offerSellBuyLimit) {
         entityManager.createNativeQuery("UPDATE offers_sell_buy_limit SET amount = :amount, price = :price, type= :type, date = :date , limit_price = :limit, company_id = :companyId, " +
                 "user_id = :userId, active = :active where id = :id")
@@ -49,9 +34,14 @@ public class OfferSellBuyLimitRepository {
                 .executeUpdate();
     }
 
-    public List<OfferSellBuyLimit> findAllOfferLimitByCompanieIdAndActive(Integer companieId, String type) {
-        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = :type AND o.active = TRUE ORDER BY price DESC ";
-        return entityManager.createQuery(sql).setParameter("companieId", companieId).setParameter("type", type).getResultList();
+    public List<OfferSellBuyLimit> findAllSellOfferLimitByCompanieIdAndActive(Integer companieId) {
+        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE ORDER BY price ASC ";
+        return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
+    }
+
+    public List<OfferSellBuyLimit> findAllBuyOfferLimitByCompanieIdAndActive(Integer companieId) {
+        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Buy' AND o.active = TRUE ORDER BY price DESC ";
+        return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 
     public List<OfferLimitDTO> findAllOfferBuyLimitByCompanieId(Integer companieId) {

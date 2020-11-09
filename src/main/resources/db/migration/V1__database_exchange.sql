@@ -16,7 +16,7 @@ CREATE TABLE "companies_statistics" (
                                         "volume" integer,
                                         "max_price" numeric(10, 2),
                                         "min_price" numeric(10, 2),
-                                        "trend_value" numeric(3, 2),
+                                        "trend_value" numeric(6, 2),
                                         "companie_id" integer
 );
 
@@ -58,6 +58,14 @@ CREATE TABLE "offers_sell_buy_limit" (
                                          "active" boolean
 );
 
+DROP TABLE IF EXISTS "stock" CASCADE;
+CREATE TABLE "stock" (
+                                         "id" SERIAL PRIMARY KEY,
+                                         "amount" integer,
+                                         "user_id" integer,
+                                         "company_id" integer
+);
+
 
 ALTER TABLE "offers_sell_buy" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
 
@@ -68,3 +76,7 @@ ALTER TABLE "offers_sell_buy_limit" ADD FOREIGN KEY ("user_id") REFERENCES "user
 ALTER TABLE "offers_sell_buy_limit" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
 
 ALTER TABLE "companies_statistics" ADD FOREIGN KEY ("companie_id") REFERENCES "companies" ("id");
+
+ALTER TABLE "stock" ADD FOREIGN KEY ("company_id") REFERENCES "companies" ("id");
+
+ALTER TABLE "stock" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");

@@ -1,14 +1,14 @@
 package pl.project.entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "companies_Statistics")
 public class CompanieStatistics {
     private int id;
     private Float price;
-    private Timestamp date;
+    private Date date;
     private Integer volume;
     private Float maxPrice;
     private Float minPrice;
@@ -38,11 +38,11 @@ public class CompanieStatistics {
 
     @Basic
     @Column(name = "date", nullable = true)
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -119,11 +119,25 @@ public class CompanieStatistics {
 
     @ManyToOne
     @JoinColumn(name = "companie_id", referencedColumnName = "id")
-    public Companie getCompanieByCompanieId() {
+    public Companie getCompanie() {
         return companie;
     }
 
-    public void setCompanieByCompanieId(Companie companiesByCompanieId) {
+    public void setCompanie(Companie companiesByCompanieId) {
         this.companie = companiesByCompanieId;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanieStatistics{" +
+                "id=" + id +
+                ", price=" + price +
+                ", date=" + date +
+                ", volume=" + volume +
+                ", maxPrice=" + maxPrice +
+                ", minPrice=" + minPrice +
+                ", trendValue=" + trendValue +
+                ", companie=" + companie +
+                '}';
     }
 }

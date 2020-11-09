@@ -4,13 +4,13 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:postgresql://localhost:5432/exchange</property>
+        <property name="connection.url">jdbc:postgresql://192.168.99.100:5432/exchange</property>
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <mapping class="pl.project.entities.CompanieStatistics"/>
-        <mapping class="pl.project.entities.Deposit"/>
         <mapping class="pl.project.entities.OfferSellBuy"/>
         <mapping class="pl.project.entities.OfferSellBuyLimit"/>
         <mapping class="pl.project.entities.User"/>
         <mapping class="pl.project.entities.Companie"/>
+        <mapping class="pl.project.entities.Stock"/>
     </session-factory>
 </hibernate-configuration>

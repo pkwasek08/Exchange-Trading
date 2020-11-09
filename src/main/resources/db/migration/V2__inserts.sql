@@ -1,5 +1,5 @@
 INSERT INTO companies(id, name, industry, revenue, capital)
-VALUES (1, 'Asseco', 'Computer Software', 2150000000, 77150000);
+VALUES (1, 'Asseco', 'Computer Software', 77150000, 2150000000);
 
 INSERT INTO companies(id,
                       name, industry, revenue, capital)
@@ -11,8 +11,8 @@ VALUES (1, 'admin', 'admin', 'admin@com', CURRENT_DATE, CURRENT_DATE, 'admin', '
 INSERT INTO users(id, name, lastname, email, created_at, birthday, login, password, cash)
 VALUES (2, 'Piotr', 'Kwasek', 'pkwasek@com', CURRENT_DATE, CURRENT_DATE, 'login', 'password', 1000000);
 
-INSERT INTO companies_statistics(id, price, date, volume, max_price, min_price, trend_value, companie_id)
-VALUES (1, 100, current_date - 1, 1000, 120, 80, 0.0, 1);
+INSERT INTO offers_sell_buy_limit(id, amount, price, company_id , type, limit_price, date, user_id, active)
+VALUES (1, 1000 , 200 , 1, 'Sell', 200, CURRENT_DATE, null, true);
 
-INSERT INTO companies_statistics(id, price, date, volume, max_price, min_price, trend_value, companie_id)
-VALUES (2, 500, CURRENT_DATE, 2000, 530, 480, 0.0, 2);
+INSERT INTO offers_sell_buy_limit(id, amount, price, company_id , type, limit_price, date, user_id, active)
+VALUES (2, 1000 , 100 , 2, 'Sell', 100, CURRENT_DATE, null, true);

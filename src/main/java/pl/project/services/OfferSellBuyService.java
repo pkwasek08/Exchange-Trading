@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.project.entities.OfferSellBuy;
 import pl.project.entities.OfferSellBuyLimit;
-import pl.project.repositories.OfferSellBuyRepository;
-import pl.project.repositories.UserRepository;
 import pl.project.repositoriesCRUD.OfferSellBuyCRUDRepository;
 
 import java.util.ArrayList;
@@ -21,15 +19,13 @@ public class OfferSellBuyService {
     @Autowired
     private OfferSellBuyCRUDRepository offerSellBuyCRUDRepository;
     @Autowired
-    private OfferSellBuyRepository offerSellBuyRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
     @Autowired
     private CompanieStatisticsService companieStatisticsService;
     @Autowired
     private OfferSellBuyLimitService offerSellBuyLimitService;
+    @Autowired
+    private StockService stockService;
 
     public List<OfferSellBuy> getAllOfferSellBuy() {
         List<OfferSellBuy> offerSellBuyLimit = new ArrayList<>();
@@ -48,7 +44,6 @@ public class OfferSellBuyService {
 
     public void addOfferSellBuy(OfferSellBuy offerSellBuy) {
         try {
-            offerSellBuyRepository.addOfferSellBuy(offerSellBuy);
             executeTranscation(offerSellBuy);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -57,7 +52,7 @@ public class OfferSellBuyService {
 
     public void addOffer(OfferSellBuy offerSellBuy) {
         try {
-            offerSellBuyRepository.addOfferSellBuy(offerSellBuy);
+            offerSellBuyCRUDRepository.save(offerSellBuy);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -73,18 +68,86 @@ public class OfferSellBuyService {
         offerSellBuyCRUDRepository.deleteById(id);
     }
 
-    public void executeTranscation(OfferSellBuy offerSellBuy) {
-        String typeList = offerSellBuy.getType().equals("Sell") ? "Buy" : "Sell";
-        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByTypeAndActive(offerSellBuy.getCompanie().getId(), typeList);
+    private void executeSellTransaction(OfferSellBuy offerSellBuy){
+        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompanie().getId(), "Buy");
 
-        offerLimitList.stream().forEach(offerLimit -> {
-            if (offerLimit.getPrice().compareTo(offerSellBuy.getPrice()) == 0) {
-                int amountStock = settleAmountStock(offerLimit.getAmount(), offerSellBuy.getAmount());
+        int valueStockUser = 0;
+        int amountStock = offerSellBuy.getAmount();
+        for (OfferSellBuyLimit offerLimit : offerLimitList) {
+            int amount;
+            if (amountStock != 0) {
+                if (offerLimit.getAmount() >= offerSellBuy.getAmount()) {
+                    valueStockUser += amountStock * offerLimit.getPrice();
+                    amount = amountStock;
+                    amountStock = 0;
+                } else {
+                    valueStockUser += offerLimit.getAmount() * offerLimit.getPrice();
+                    amountStock -= offerLimit.getAmount();
+                    amount = offerLimit.getAmount();
+                }
                 OfferSellBuy executedSellOffer = new OfferSellBuy();
                 executedSellOffer.setId(null);
-                executedSellOffer.setAmount(amountStock);
-                executedSellOffer.setPrice(offerLimit.getPrice());
-                executedSellOffer.setType(typeList);
+                executedSellOffer.setAmount(amount);
+                executedSellOffer.setPrice(amount * offerLimit.getPrice());
+                executedSellOffer.setType(offerSellBuy.getType());
+                executedSellOffer.setDate(new Date());
+                executedSellOffer.setCompanie(offerSellBuy.getCompanie());
+                executedSellOffer.setUser(offerSellBuy.getUser());
+                executedSellOffer.setActive(false);
+
+                OfferSellBuy executedBuyOffer = new OfferSellBuy();
+                executedBuyOffer.setId(null);
+                executedBuyOffer.setAmount(amount);
+                executedBuyOffer.setPrice(amount * offerLimit.getPrice());
+                executedBuyOffer.setType(offerLimit.getType());
+                executedBuyOffer.setDate(new Date());
+                executedBuyOffer.setCompanie(offerLimit.getCompanie());
+                executedBuyOffer.setUser(offerLimit.getUser());
+                executedBuyOffer.setActive(false);
+
+                offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() - offerLimit.getPrice() * amount);
+                userService.settleUserMoney(offerSellBuy.getUser().getId(), offerSellBuy.getUser().getCash());
+                addOffer(executedBuyOffer);
+                addOffer(executedSellOffer);
+                stockService.removeStockFromUser(executedSellOffer.getUser(), executedSellOffer.getCompanie(), executedSellOffer.getAmount());
+                stockService.addStockToUser(executedBuyOffer.getUser(), executedBuyOffer.getCompanie(), executedBuyOffer.getAmount());
+
+                offerLimit.setAmount(offerLimit.getAmount() - amount);
+                if (offerLimit.getAmount() == 0) {
+                    offerLimit.setActive(false);
+                }
+                offerSellBuyLimitService.updateOfferSellBuyLimitCRUD(offerLimit);
+                companieStatisticsService.updateDailyCompanieStatistic(executedBuyOffer.getCompanie().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
+                if(amount == 0){
+                    break;
+                }
+            }
+        }
+    }
+
+    private void executeBuyTransaction(OfferSellBuy offerSellBuy){
+        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompanie().getId(), "Sell");
+
+        int valueStockUser = 0;
+        int amountStock = offerSellBuy.getAmount();
+        for (OfferSellBuyLimit offerLimit : offerLimitList) {
+            int amount;
+            if (amountStock != 0) {
+                if (offerLimit.getAmount() >= offerSellBuy.getAmount()) {
+                    valueStockUser += amountStock * offerLimit.getPrice();
+                    amount = amountStock;
+                    amountStock = 0;
+                } else {
+                    valueStockUser += offerLimit.getAmount() * offerLimit.getPrice();
+                    amountStock -= offerLimit.getAmount();
+                    amount = offerLimit.getAmount();
+                }
+
+                OfferSellBuy executedSellOffer = new OfferSellBuy();
+                executedSellOffer.setId(null);
+                executedSellOffer.setAmount(amount);
+                executedSellOffer.setPrice(amount * offerLimit.getPrice());
+                executedSellOffer.setType(offerLimit.getType());
                 executedSellOffer.setDate(new Date());
                 executedSellOffer.setCompanie(offerLimit.getCompanie());
                 executedSellOffer.setUser(offerLimit.getUser());
@@ -92,35 +155,44 @@ public class OfferSellBuyService {
 
                 OfferSellBuy executedBuyOffer = new OfferSellBuy();
                 executedBuyOffer.setId(null);
-                executedBuyOffer.setAmount(amountStock);
-                executedBuyOffer.setPrice(offerSellBuy.getPrice());
+                executedBuyOffer.setAmount(amount);
+                executedBuyOffer.setPrice(amount * offerLimit.getPrice());
                 executedBuyOffer.setType(offerSellBuy.getType());
                 executedBuyOffer.setDate(new Date());
                 executedBuyOffer.setCompanie(offerSellBuy.getCompanie());
                 executedBuyOffer.setUser(offerSellBuy.getUser());
                 executedBuyOffer.setActive(false);
 
-                if (typeList.equals("Sell")) {
-                    offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() + offerLimit.getPrice() * amountStock);
-                    offerLimit.getUser().setCash(offerLimit.getUser().getCash() - offerLimit.getPrice() * amountStock);
-                } else {
-                    offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() - offerLimit.getPrice() * amountStock);
-                    offerLimit.getUser().setCash(offerLimit.getUser().getCash() + offerLimit.getPrice() * amountStock);
-                }
+                offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() - offerLimit.getPrice() * amount);
                 userService.settleUserMoney(offerSellBuy.getUser().getId(), offerSellBuy.getUser().getCash());
-                userService.settleUserMoney(offerLimit.getUser().getId(), offerLimit.getUser().getCash());
-
                 addOffer(executedBuyOffer);
-                addOffer(executedSellOffer);
+                stockService.addStockToUser(executedBuyOffer.getUser(), executedBuyOffer.getCompanie(), executedBuyOffer.getAmount());
 
-                offerLimit.setAmount(offerLimit.getAmount() - amountStock);
-                if(offerLimit.getAmount() == 0){
+                if(offerLimit.getUser() != null) {
+                    offerLimit.getUser().setCash(offerLimit.getUser().getCash() + offerLimit.getPrice() * amount);
+                    userService.settleUserMoney(offerLimit.getUser().getId(), offerLimit.getUser().getCash());
+                    addOffer(executedSellOffer);
+                }
+
+                offerLimit.setAmount(offerLimit.getAmount() - amount);
+                if (offerLimit.getAmount() == 0) {
                     offerLimit.setActive(false);
                 }
                 offerSellBuyLimitService.updateOfferSellBuyLimitCRUD(offerLimit);
-                companieStatisticsService.updateDailyCompanieStatistic(executedBuyOffer);
+                companieStatisticsService.updateDailyCompanieStatistic(executedBuyOffer.getCompanie().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
+                if(amount == 0){
+                    break;
+                }
             }
-        });
+        }
+    }
+
+    public void executeTranscation(OfferSellBuy offerSellBuy) {
+        if(offerSellBuy.getType().equals("Sell")){
+            executeSellTransaction(offerSellBuy);
+        } else {
+            executeBuyTransaction(offerSellBuy);
+        }
     }
 
     private int settleAmountStock(Integer sellAmount, Integer buyAmount) {
