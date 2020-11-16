@@ -35,24 +35,24 @@ public class OfferSellBuyLimitRepository {
     }
 
     public List<OfferSellBuyLimit> findAllSellOfferLimitByCompanieIdAndActive(Integer companieId) {
-        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE ORDER BY price ASC ";
+        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE ORDER BY o.price ASC ";
         return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 
     public List<OfferSellBuyLimit> findAllBuyOfferLimitByCompanieIdAndActive(Integer companieId) {
-        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Buy' AND o.active = TRUE ORDER BY price DESC ";
+        String sql = "SELECT o FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Buy' AND o.active = TRUE ORDER BY o.price DESC ";
         return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 
     public List<OfferLimitDTO> findAllOfferBuyLimitByCompanieId(Integer companieId) {
         String sql = "SELECT NEW pl.project.dto.OfferLimitDTO(o.price, sum(o.amount))" +
-                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Buy' AND o.active = TRUE GROUP BY o.price ORDER BY o.price ASC";
+                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Buy' AND o.active = TRUE GROUP BY o.price ORDER BY o.price DESC";
         return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 
     public List<OfferLimitDTO> findAllOfferSellLimitByCompanieId(Integer companieId) {
         String sql = "SELECT NEW pl.project.dto.OfferLimitDTO(o.price, sum(o.amount))" +
-                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE GROUP BY o.price ORDER BY o.price DESC";
+                " FROM OfferSellBuyLimit o WHERE o.companie.id = :companieId AND o.type = 'Sell' AND o.active = TRUE GROUP BY o.price ORDER BY o.price ASC";
         return entityManager.createQuery(sql).setParameter("companieId", companieId).getResultList();
     }
 }

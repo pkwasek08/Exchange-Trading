@@ -76,7 +76,7 @@ public class OfferSellBuyService {
         for (OfferSellBuyLimit offerLimit : offerLimitList) {
             int amount;
             if (amountStock != 0) {
-                if (offerLimit.getAmount() >= offerSellBuy.getAmount()) {
+                if (offerLimit.getAmount() >= amountStock) {
                     valueStockUser += amountStock * offerLimit.getPrice();
                     amount = amountStock;
                     amountStock = 0;
@@ -133,7 +133,7 @@ public class OfferSellBuyService {
         for (OfferSellBuyLimit offerLimit : offerLimitList) {
             int amount;
             if (amountStock != 0) {
-                if (offerLimit.getAmount() >= offerSellBuy.getAmount()) {
+                if (offerLimit.getAmount() >= amountStock) {
                     valueStockUser += amountStock * offerLimit.getPrice();
                     amount = amountStock;
                     amountStock = 0;
