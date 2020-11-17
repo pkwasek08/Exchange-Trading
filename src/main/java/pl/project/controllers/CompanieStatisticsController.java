@@ -1,6 +1,7 @@
 package pl.project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import pl.project.entities.CompanieStatistics;
 import pl.project.services.CompanieStatisticsService;
@@ -30,6 +31,13 @@ public class CompanieStatisticsController {
     public List<CompanieStatistics> getCompanieStatisticsByCompanieId(@RequestParam Integer companieId) {
         return companieStatisticsService.getCompanieStatisticsByCompanieId(companieId);
     }
+
+    @RequestMapping("/companie/paginator")
+    @CrossOrigin(origins = "*")
+    public Page<CompanieStatistics> getCompanieStatisticsByCompanieIdPage(@RequestParam Integer companieId, @RequestParam int page, @RequestParam int size) {
+        return companieStatisticsService.getCompanieStatisticsPageByCompanieId(companieId, page, size);
+    }
+
 
     @RequestMapping("/companie/latest")
     @CrossOrigin(origins = "*")

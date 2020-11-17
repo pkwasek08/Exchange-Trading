@@ -3,6 +3,7 @@ package pl.project.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import pl.project.entities.OfferSellBuy;
 import pl.project.services.OfferSellBuyService;
@@ -22,10 +23,10 @@ public class OfferSellBuyController {
         return offerSellBuyService.getAllOfferSellBuy();
     }
 
-    @RequestMapping("/user")
+    @RequestMapping("/user/paginator")
     @CrossOrigin(origins = "*")
-    public List<OfferSellBuy> getAllOfferByUserId(@RequestParam Integer userId) {
-        return offerSellBuyService.getAllOffersByUserId(userId);
+    public Page<OfferSellBuy> getAllOfferByUserId(@RequestParam Integer userId, @RequestParam int page, @RequestParam int size) {
+        return offerSellBuyService.getAllOffersByUserId(userId, page, size);
     }
 
     @GetMapping("/{id}")

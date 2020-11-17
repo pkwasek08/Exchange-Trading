@@ -3,6 +3,8 @@ package pl.project.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.project.entities.CompanieStatistics;
 import pl.project.repositoriesCRUD.CompanieStatisticsCRUDRepository;
@@ -37,6 +39,10 @@ public class CompanieStatisticsService {
 
     public List<CompanieStatistics> getCompanieStatisticsByCompanieId(Integer companyId) {
         return companieStatisticsCRUDRepository.findAllByCompanie_IdOrderByDateDesc(companyId);
+    }
+
+    public Page<CompanieStatistics> getCompanieStatisticsPageByCompanieId(Integer companyId, int page, int size) {
+        return companieStatisticsCRUDRepository.findAllByCompanie_IdOrderByDateDesc(companyId, PageRequest.of(page, size));
     }
 
     public CompanieStatistics getCompanieStatisticsByCompanieIdLatest(Integer companyId) {

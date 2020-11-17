@@ -3,6 +3,8 @@ package pl.project.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.project.entities.OfferSellBuy;
 import pl.project.entities.OfferSellBuyLimit;
@@ -33,8 +35,8 @@ public class OfferSellBuyService {
         return offerSellBuyLimit;
     }
 
-    public List<OfferSellBuy> getAllOffersByUserId(Integer userId) {
-        return offerSellBuyCRUDRepository.findAllByUserId(userId);
+    public Page<OfferSellBuy> getAllOffersByUserId(Integer userId, int page, int size) {
+        return offerSellBuyCRUDRepository.findAllByUserId(userId, PageRequest.of(page, size));
     }
 
     public OfferSellBuy getOfferSellBuy(Integer id) {
