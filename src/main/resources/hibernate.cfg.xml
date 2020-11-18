@@ -6,11 +6,11 @@
     <session-factory>
         <property name="connection.url">jdbc:postgresql://192.168.99.100:5432/exchange</property>
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <mapping class="pl.project.entities.CompanieStatistics"/>
-        <mapping class="pl.project.entities.OfferSellBuy"/>
-        <mapping class="pl.project.entities.OfferSellBuyLimit"/>
-        <mapping class="pl.project.entities.User"/>
-        <mapping class="pl.project.entities.Companie"/>
-        <mapping class="pl.project.entities.Stock"/>
+        <mapping class="pl.project.companyStatistics.CompanyStatistics"/>
+        <mapping class="pl.project.offerSellBuy.OfferSellBuy"/>
+        <mapping class="pl.project.offerSellBuyLimit.OfferSellBuyLimit"/>
+        <mapping class="pl.project.user.User"/>
+        <mapping class="pl.project.company.Company"/>
+        <mapping class="pl.project.stock.Stock"/>
     </session-factory>
 </hibernate-configuration>
