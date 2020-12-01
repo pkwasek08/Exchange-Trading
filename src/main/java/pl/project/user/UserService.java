@@ -2,6 +2,10 @@ package pl.project.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.project.execDetails.ExecDetails;
+import pl.project.execDetails.ExecDetailsHelper;
+
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +32,21 @@ public class UserService {
         return user;
     }
 
-    public void addUser(User user) {
-        userRepository.save(user);
+    public ExecDetails addUser(User user) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        User newUser =  userRepository.save(user);
+        execHelper.addNewDbTime();
+        return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
     }
 
+    public ExecDetails addUserList(List<User> userList) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        userList.stream().forEach(user -> userRepository.save(user));
+        execHelper.addNewDbTime();
+        return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+    }
 
     public void updateUser(Integer id, User user) {
         userRepository.save(user);

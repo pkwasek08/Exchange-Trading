@@ -11,15 +11,15 @@ services:
     ports:
       - 5432:5432
 
-  dt-api:
-    image: pkwasek/et-api:5.0
+  et-api:
+    image: pkwasek/et-api:5.1
     depends_on:
       - dbpostgresql
     ports:
       - 8080:8080
 
   et-app:
-    image: pkwasek/et-angular-app:5.0
+    image: pkwasek/et-angular-app:5.1
     container_name: et-app-angular
     ports:
       - 4200:80

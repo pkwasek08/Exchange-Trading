@@ -3,7 +3,9 @@ package pl.project.user;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.project.execDetails.ExecDetails;
 
 import java.util.List;
 
@@ -34,8 +36,14 @@ public class UserController {
 
     @PostMapping()
     @CrossOrigin(origins = "*")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
+    public ResponseEntity<ExecDetails> addUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.addUser(user));
+    }
+
+    @PostMapping("/addUserList")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ExecDetails> addUserList(@RequestBody List<User> userList) {
+        return ResponseEntity.ok(userService.addUserList(userList));
     }
 
     @PutMapping(value = "/{id}")
