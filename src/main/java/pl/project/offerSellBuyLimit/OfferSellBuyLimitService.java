@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.project.company.CompanyService;
 import pl.project.companyStatistics.CompanyStatisticsService;
 import pl.project.offerSellBuy.OfferSellBuyService;
 import pl.project.stock.StockService;
@@ -28,6 +29,8 @@ public class OfferSellBuyLimitService {
     private UserService userService;
     @Autowired
     private StockService stockService;
+    @Autowired
+    private CompanyService companyService;
 
     public List<OfferSellBuyLimit> getAllOfferSellBuyLimit() {
         List<OfferSellBuyLimit> offerSellBuyLimit = new ArrayList<>();
@@ -36,7 +39,7 @@ public class OfferSellBuyLimitService {
     }
 
     public List<OfferSellBuyLimit> getAllOffersLimitByCompanyAndTypeAndActive(Integer companyId, String type) {
-        if(type.equals("Sell")){
+        if (type.equals("Sell")) {
             return offerSellBuyLimitDAO.findAllSellOfferLimitByCompanyIdAndActive(companyId);
         } else {
             return offerSellBuyLimitDAO.findAllBuyOfferLimitByCompanyIdAndActive(companyId);
@@ -58,6 +61,15 @@ public class OfferSellBuyLimitService {
         executeTranscation(offerSellBuyLimit);
     }
 
+    public void addOfferSellBuyLimit(OfferLimitDTO offerLimitDTO) {
+        OfferSellBuyLimit offerSellBuyLimit = new OfferSellBuyLimit(offerLimitDTO.getId(), Math.toIntExact(offerLimitDTO.getAmount()),
+                offerLimitDTO.getPrice(), offerLimitDTO.getType(), offerLimitDTO.getLimit(), offerLimitDTO.getDate(),
+                companyService.getCompany(offerLimitDTO.getCompanyId()), userService.getUser(offerLimitDTO.getUserId()), true);
+        offerSellBuyLimit = offerSellBuyLimitRepository.save(offerSellBuyLimit);
+        executeTranscation(offerSellBuyLimit);
+    }
+
+
     public List<OfferLimitDTO> getOffersBuyLimitByCompanyId(Integer companyId) {
         return offerSellBuyLimitDAO.findAllOfferBuyLimitByCompanyId(companyId);
     }
@@ -67,14 +79,9 @@ public class OfferSellBuyLimitService {
     }
 
 
-    public void updateOfferSellBuyLimitCRUD(OfferSellBuyLimit offerSellBuyLimit) {
+    public void updateOfferSellBuyLimit(OfferSellBuyLimit offerSellBuyLimit) {
         offerSellBuyLimitRepository.save(offerSellBuyLimit);
     }
-
-    public void updateOfferSellBuyLimit(OfferSellBuyLimit offerSellBuyLimit) {
-        offerSellBuyLimitDAO.updateOfferSellBuy(offerSellBuyLimit);
-    }
-
 
     public void deleteOfferSellBuyLimit(Integer id) {
         OfferSellBuyLimit offerSellBuyLimit = getOfferSellBuyLimit(id);

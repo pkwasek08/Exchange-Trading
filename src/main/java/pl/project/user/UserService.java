@@ -7,6 +7,7 @@ import pl.project.execDetails.ExecDetailsHelper;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -32,20 +33,21 @@ public class UserService {
         return user;
     }
 
-    public ExecDetails addUser(User user) {
+    public ExecDetailsUser addUser(User user) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
         execHelper.setStartDbTime(OffsetDateTime.now());
-        User newUser =  userRepository.save(user);
+        User newUser = userRepository.save(user);
         execHelper.addNewDbTime();
-        return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), newUser);
     }
 
-    public ExecDetails addUserList(List<User> userList) {
+    public ExecDetailsUser addUserList(List<User> userList) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
         execHelper.setStartDbTime(OffsetDateTime.now());
-        userList.stream().forEach(user -> userRepository.save(user));
+        List<User> resultUserList = new LinkedList<>();
+        userList.stream().forEach(user -> resultUserList.add(userRepository.save(user)));
         execHelper.addNewDbTime();
-        return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), resultUserList);
     }
 
     public void updateUser(Integer id, User user) {

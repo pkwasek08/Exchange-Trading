@@ -33,6 +33,12 @@ public class OfferSellBuyLimitController {
         offerSellBuyLimitService.addOfferSellBuyLimit(offerSellBuyLimit);
     }
 
+    @PostMapping("/newOfferLimit")
+    @CrossOrigin(origins = "*")
+    public void addNewOfferLimit(@RequestBody OfferLimitDTO offerLimitDTO) {
+        offerSellBuyLimitService.addOfferSellBuyLimit(offerLimitDTO);
+    }
+
     @RequestMapping("/sell/company")
     @CrossOrigin(origins = "*")
     public List<OfferLimitDTO> getOffersSellLimitByCompanyId(@RequestParam Integer companyId) {
@@ -54,7 +60,7 @@ public class OfferSellBuyLimitController {
     @PutMapping(value = "/{id}")
     @CrossOrigin(origins = "*")
     public void updateOfferSellBuyLimit(@RequestBody OfferSellBuyLimit offerSellBuyLimit) {
-        offerSellBuyLimitService.updateOfferSellBuyLimitCRUD(offerSellBuyLimit);
+        offerSellBuyLimitService.updateOfferSellBuyLimit(offerSellBuyLimit);
     }
 
     @DeleteMapping(value = "/{id}")

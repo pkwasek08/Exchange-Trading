@@ -4,7 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.project.execDetails.ExecDetails;
 
 import java.util.List;
 
@@ -36,8 +38,14 @@ public class OfferSellBuyController {
 
     @PostMapping()
     @CrossOrigin(origins = "*")
-    public void addOfferSellBuy(@RequestBody OfferSellBuy offerSellBuy) {
-        offerSellBuyService.addOfferSellBuy(offerSellBuy);
+    public ResponseEntity<ExecDetails> addOfferSellBuy(@RequestBody OfferSellBuy offerSellBuy) {
+        return ResponseEntity.ok(offerSellBuyService.addOfferSellBuy(offerSellBuy));
+    }
+
+    @PostMapping("/newOffer")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ExecDetails> addNewOffer(@RequestBody OfferSellBuyDTO offerSellBuyDTO) {
+        return ResponseEntity.ok(offerSellBuyService.addOfferSellBuy(offerSellBuyDTO));
     }
 
     @PutMapping(value = "/{id}")

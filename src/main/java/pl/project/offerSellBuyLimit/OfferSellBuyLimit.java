@@ -1,4 +1,6 @@
 package pl.project.offerSellBuyLimit;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import pl.project.company.Company;
 import pl.project.user.User;
 
@@ -6,6 +8,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "offers_Sell_Buy_Limit")
 public class OfferSellBuyLimit {
     private int id;

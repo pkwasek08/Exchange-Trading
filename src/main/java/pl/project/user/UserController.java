@@ -36,13 +36,13 @@ public class UserController {
 
     @PostMapping()
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ExecDetails> addUser(@RequestBody User user) {
+    public ResponseEntity<ExecDetailsUser> addUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
     @PostMapping("/addUserList")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ExecDetails> addUserList(@RequestBody List<User> userList) {
+    public ResponseEntity<ExecDetailsUser> addUserList(@RequestBody List<User> userList) {
         return ResponseEntity.ok(userService.addUserList(userList));
     }
 

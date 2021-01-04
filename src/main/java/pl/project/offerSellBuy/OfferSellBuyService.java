@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import pl.project.company.CompanyService;
 import pl.project.companyStatistics.CompanyStatisticsService;
+import pl.project.execDetails.ExecDetails;
+import pl.project.execDetails.ExecDetailsHelper;
 import pl.project.offerSellBuyLimit.OfferSellBuyLimit;
 import pl.project.offerSellBuyLimit.OfferSellBuyLimitService;
 import pl.project.stock.StockService;
 import pl.project.user.UserService;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +34,8 @@ public class OfferSellBuyService {
     private OfferSellBuyLimitService offerSellBuyLimitService;
     @Autowired
     private StockService stockService;
+    @Autowired
+    private CompanyService companyService;
 
     public List<OfferSellBuy> getAllOfferSellBuy() {
         List<OfferSellBuy> offerSellBuyLimit = new ArrayList<>();
@@ -46,13 +52,35 @@ public class OfferSellBuyService {
         return offerSellBuy;
     }
 
-    public void addOfferSellBuy(OfferSellBuy offerSellBuy) {
+    public ExecDetails addOfferSellBuy(OfferSellBuy offerSellBuy) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
         try {
             executeTranscation(offerSellBuy);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getCause());
+        } finally {
+            execHelper.addNewDbTime();
+            return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
         }
     }
+
+    public ExecDetails addOfferSellBuy(OfferSellBuyDTO offerSellBuyDTO) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        OfferSellBuy offerSellBuy = new OfferSellBuy(0l, offerSellBuyDTO.getAmount(), offerSellBuyDTO.getPrice(),
+                offerSellBuyDTO.getType(), offerSellBuyDTO.getDate(), companyService.getCompany(offerSellBuyDTO.getCompanyId()),
+                userService.getUser(offerSellBuyDTO.getUserId()), true);
+        try {
+            executeTranscation(offerSellBuy);
+        } catch (Exception e) {
+            log.error(new Date().getTime() + " " + e.getStackTrace());
+        } finally {
+            execHelper.addNewDbTime();
+            return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+        }
+    }
+
 
     public void addOffer(OfferSellBuy offerSellBuy) {
         try {
@@ -72,7 +100,7 @@ public class OfferSellBuyService {
         offerSellBuyRepository.deleteById(id);
     }
 
-    private void executeSellTransaction(OfferSellBuy offerSellBuy){
+    private void executeSellTransaction(OfferSellBuy offerSellBuy) {
         List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompany().getId(), "Buy");
 
         int valueStockUser = 0;
@@ -120,16 +148,16 @@ public class OfferSellBuyService {
                 if (offerLimit.getAmount() == 0) {
                     offerLimit.setActive(false);
                 }
-                offerSellBuyLimitService.updateOfferSellBuyLimitCRUD(offerLimit);
+                offerSellBuyLimitService.updateOfferSellBuyLimit(offerLimit);
                 companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
-                if(amount == 0){
+                if (amount == 0) {
                     break;
                 }
             }
         }
     }
 
-    private void executeBuyTransaction(OfferSellBuy offerSellBuy){
+    private void executeBuyTransaction(OfferSellBuy offerSellBuy) {
         List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompany().getId(), "Sell");
 
         int valueStockUser = 0;
@@ -172,7 +200,7 @@ public class OfferSellBuyService {
                 addOffer(executedBuyOffer);
                 stockService.addStockToUser(executedBuyOffer.getUser(), executedBuyOffer.getCompany(), executedBuyOffer.getAmount());
 
-                if(offerLimit.getUser() != null) {
+                if (offerLimit.getUser() != null) {
                     offerLimit.getUser().setCash(offerLimit.getUser().getCash() + offerLimit.getPrice() * amount);
                     userService.settleUserMoney(offerLimit.getUser().getId(), offerLimit.getUser().getCash());
                     addOffer(executedSellOffer);
@@ -182,9 +210,9 @@ public class OfferSellBuyService {
                 if (offerLimit.getAmount() == 0) {
                     offerLimit.setActive(false);
                 }
-                offerSellBuyLimitService.updateOfferSellBuyLimitCRUD(offerLimit);
+                offerSellBuyLimitService.updateOfferSellBuyLimit(offerLimit);
                 companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
-                if(amount == 0){
+                if (amount == 0) {
                     break;
                 }
             }
@@ -192,7 +220,7 @@ public class OfferSellBuyService {
     }
 
     public void executeTranscation(OfferSellBuy offerSellBuy) {
-        if(offerSellBuy.getType().equals("Sell")){
+        if (offerSellBuy.getType().equals("Sell")) {
             executeSellTransaction(offerSellBuy);
         } else {
             executeBuyTransaction(offerSellBuy);
