@@ -3,14 +3,18 @@ package pl.project.stock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import pl.project.company.Company;
 import pl.project.companyStatistics.CompanyStatistics;
 import pl.project.companyStatistics.CompanyStatisticsService;
+import pl.project.execDetails.ExecDetails;
+import pl.project.execDetails.ExecDetailsHelper;
 import pl.project.offerSellBuyLimit.OfferSellBuyLimitService;
 import pl.project.offerSellBuyLimit.OfferSellBuyLimit;
 import pl.project.user.User;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +41,7 @@ public class StockService {
         return stockRepository.findAllByUser_Id(userId);
     }
 
-    public List<UserStockDTO> getAllStockByUserIdTableView(Integer userId){
+    public List<UserStockDTO> getAllStockByUserIdTableView(Integer userId) {
         List<Stock> stockUserList = getAllStockByUserId(userId);
         List<UserStockDTO> userStockViewList = new ArrayList<>();
         stockUserList.stream().forEach(stock -> {
@@ -45,10 +49,21 @@ public class StockService {
             CompanyStatistics companyStatistics = companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(stock.getCompany().getId());
             userStockDTO.setActualPrice(companyStatistics.getPrice());
             userStockDTO.setTrend(companyStatistics.getTrendValue());
-            userStockDTO.setActualPrice(getCurrentPriceStockUser(stock.getCompany().getId(), stock.getAmount()));
+            //userStockDTO.setActualPrice(getCurrentPriceStockUser(stock.getCompany().getId(), stock.getAmount()));
             userStockViewList.add(userStockDTO);
         });
         return userStockViewList;
+    }
+
+    public ExecDetailsUserStock getStockByUserIdTableView(@NonNull Integer userId, @NonNull Integer companyId) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        Stock stockUser = getStockByUserIdAndCompanyId(userId, companyId);
+        UserStockDTO userStockDTO = new UserStockDTO(stockUser.getCompany().getName(), stockUser.getCompany().getIndustry(), stockUser.getAmount());
+        CompanyStatistics companyStatistics = companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(stockUser.getCompany().getId());
+        execHelper.addNewDbTime();
+        userStockDTO.setActualPrice(companyStatistics.getPrice());
+        return new ExecDetailsUserStock(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), userStockDTO);
     }
 
     public Stock getStockByUserIdAndCompanyId(Integer userId, Integer companyId) {
@@ -99,7 +114,7 @@ public class StockService {
         }
     }
 
-    private Float getCurrentPriceStockUser(Integer companyId, int amountStockUser){
+    private Float getCurrentPriceStockUser(Integer companyId, int amountStockUser) {
         List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(companyId, "Buy");
         Float valueStockUser = 0f;
         int amountStock = amountStockUser;

@@ -2,7 +2,6 @@ package pl.project.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.project.execDetails.ExecDetails;
 import pl.project.execDetails.ExecDetailsHelper;
 
 import java.time.OffsetDateTime;

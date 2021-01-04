@@ -1,8 +1,11 @@
 package pl.project.offerSellBuyLimit;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class OfferLimitDTO {
     Float price;
     Long amount;

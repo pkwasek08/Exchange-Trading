@@ -3,6 +3,7 @@ package pl.project.offerSellBuyLimit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,13 +43,25 @@ public class OfferSellBuyLimitController {
     @RequestMapping("/sell/company")
     @CrossOrigin(origins = "*")
     public List<OfferLimitDTO> getOffersSellLimitByCompanyId(@RequestParam Integer companyId) {
-        return offerSellBuyLimitService.getOffersSellLimitByCompanyId(companyId);
+        return offerSellBuyLimitService.getOffersSellLimitListByCompanyId(companyId);
     }
 
     @RequestMapping("/buy/company")
     @CrossOrigin(origins = "*")
     public List<OfferLimitDTO> getOffersBuyLimitByCompanyId(@RequestParam Integer companyId) {
-        return offerSellBuyLimitService.getOffersBuyLimitByCompanyId(companyId);
+        return offerSellBuyLimitService.getOffersBuyLimitListByCompanyId(companyId);
+    }
+
+    @RequestMapping("/sell/company/first/{companyId}")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersSellByCompanyId(@PathVariable Integer companyId) {
+        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferSellLimitByCompanyId(companyId));
+    }
+
+    @RequestMapping("/buy/company/first/{companyId}")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersBuyByCompanyId(@PathVariable Integer companyId) {
+        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferBuyLimitByCompanyId(companyId));
     }
 
     @RequestMapping("/user")

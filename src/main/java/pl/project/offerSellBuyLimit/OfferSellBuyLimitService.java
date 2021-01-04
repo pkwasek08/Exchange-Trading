@@ -3,13 +3,18 @@ package pl.project.offerSellBuyLimit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import pl.project.company.CompanyService;
 import pl.project.companyStatistics.CompanyStatisticsService;
+import pl.project.execDetails.ExecDetails;
+import pl.project.execDetails.ExecDetailsHelper;
 import pl.project.offerSellBuy.OfferSellBuyService;
 import pl.project.stock.StockService;
 import pl.project.user.UserService;
 
+import javax.persistence.NoResultException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,14 +75,30 @@ public class OfferSellBuyLimitService {
     }
 
 
-    public List<OfferLimitDTO> getOffersBuyLimitByCompanyId(Integer companyId) {
+    public List<OfferLimitDTO> getOffersBuyLimitListByCompanyId(Integer companyId) {
         return offerSellBuyLimitDAO.findAllOfferBuyLimitByCompanyId(companyId);
     }
 
-    public List<OfferLimitDTO> getOffersSellLimitByCompanyId(Integer companyId) {
+    public List<OfferLimitDTO> getOffersSellLimitListByCompanyId(Integer companyId) {
         return offerSellBuyLimitDAO.findAllOfferSellLimitByCompanyId(companyId);
     }
 
+
+    public ExecDetailsOfferLimit getFirstOfferBuyLimitByCompanyId(@NonNull Integer companyId) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferBuyLimitByCompanyId(companyId);
+        execHelper.addNewDbTime();
+        return new ExecDetailsOfferLimit(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), offerLimitDTO);
+    }
+
+    public ExecDetailsOfferLimit getFirstOfferSellLimitByCompanyId(@NonNull Integer companyId) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferSellLimitByCompanyId(companyId);
+        execHelper.addNewDbTime();
+        return new ExecDetailsOfferLimit(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), offerLimitDTO);
+    }
 
     public void updateOfferSellBuyLimit(OfferSellBuyLimit offerSellBuyLimit) {
         offerSellBuyLimitRepository.save(offerSellBuyLimit);

@@ -1,6 +1,7 @@
 package pl.project.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,12 @@ public class StockController {
     @CrossOrigin(origins = "*")
     public List<UserStockDTO> getAllStockByUserIdTableView(@RequestParam Integer userId) {
         return stockService.getAllStockByUserIdTableView(userId);
+    }
+
+    @GetMapping("/company/{companyId}/user/{userId}")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ExecDetailsUserStock> getStockByUserIdAndCompanyId(@PathVariable Integer userId, @PathVariable Integer companyId) {
+        return ResponseEntity.ok(stockService.getStockByUserIdTableView(userId, companyId));
     }
 
     @GetMapping("/user/company")
