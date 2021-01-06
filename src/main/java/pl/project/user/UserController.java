@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.project.execDetails.ExecDetails;
 
 import java.util.List;
 
@@ -27,6 +26,13 @@ public class UserController {
     public User getUser(@PathVariable Integer id) {
         return userService.getUser(id);
     }
+
+    @GetMapping("/details/{userId}")
+    @CrossOrigin(origins = "*")
+    public  ResponseEntity<ExecDetailsUser> getUserExecDetails(@PathVariable Integer userId) {
+        return ResponseEntity.ok(userService.getExecDetailsUser(userId));
+    }
+
 
     @RequestMapping("/login")
     @CrossOrigin(origins = "*")

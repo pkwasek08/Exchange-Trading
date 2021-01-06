@@ -84,18 +84,18 @@ public class OfferSellBuyLimitService {
     }
 
 
-    public ExecDetailsOfferLimit getFirstOfferBuyLimitByCompanyId(@NonNull Integer companyId) {
+    public ExecDetailsOfferLimit getFirstOfferBuyLimitByCompanyId(@NonNull Integer companyId, @NonNull Integer userId) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
         execHelper.setStartDbTime(OffsetDateTime.now());
-        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferBuyLimitByCompanyId(companyId);
+        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferBuyLimitByCompanyId(companyId, userId);
         execHelper.addNewDbTime();
         return new ExecDetailsOfferLimit(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), offerLimitDTO);
     }
 
-    public ExecDetailsOfferLimit getFirstOfferSellLimitByCompanyId(@NonNull Integer companyId) {
+    public ExecDetailsOfferLimit getFirstOfferSellLimitByCompanyId(@NonNull Integer companyId, @NonNull Integer userId) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
         execHelper.setStartDbTime(OffsetDateTime.now());
-        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferSellLimitByCompanyId(companyId);
+        OfferLimitDTO offerLimitDTO = offerSellBuyLimitDAO.findOfferSellLimitByCompanyId(companyId, userId);
         execHelper.addNewDbTime();
         return new ExecDetailsOfferLimit(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), offerLimitDTO);
     }

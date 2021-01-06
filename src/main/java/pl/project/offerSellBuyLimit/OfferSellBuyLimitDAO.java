@@ -38,25 +38,29 @@ public class OfferSellBuyLimitDAO {
         return entityManager.createQuery(sql).setParameter("companyId", companyId).setMaxResults(10).getResultList();
     }
 
-    public OfferLimitDTO findOfferBuyLimitByCompanyId(Integer companyId) {
+    public OfferLimitDTO findOfferBuyLimitByCompanyId(Integer companyId, Integer userId) {
         String sql = "SELECT NEW pl.project.offerSellBuyLimit.OfferLimitDTO(o.price, sum(o.amount))" +
-                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Buy' AND o.active = TRUE GROUP BY o.price ORDER BY o.price DESC";
+                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Buy' AND o.active = TRUE " +
+                " AND (o.user.id != :userId OR o.user.id = null) GROUP BY o.price ORDER BY o.price DESC";
         try {
-            return (OfferLimitDTO) entityManager.createQuery(sql).setParameter("companyId", companyId).setMaxResults(1).getSingleResult();
+            return (OfferLimitDTO) entityManager.createQuery(sql).setParameter("companyId", companyId).setParameter("userId", userId)
+                    .setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             log.error(e.getMessage() + " " + e.getLocalizedMessage());
-            return new OfferLimitDTO();
+            return new OfferLimitDTO(0f, 0l);
         }
     }
 
-    public OfferLimitDTO findOfferSellLimitByCompanyId(Integer companyId) {
+    public OfferLimitDTO findOfferSellLimitByCompanyId(Integer companyId, Integer userId) {
         String sql = "SELECT NEW pl.project.offerSellBuyLimit.OfferLimitDTO(o.price, sum(o.amount))" +
-                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Sell' AND o.active = TRUE GROUP BY o.price ORDER BY o.price ASC";
+                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Sell' AND o.active = TRUE" +
+                " AND (o.user.id != :userId OR o.user.id = null) GROUP BY o.price ORDER BY o.price ASC";
         try {
-            return (OfferLimitDTO) entityManager.createQuery(sql).setParameter("companyId", companyId).setMaxResults(1).getSingleResult();
+            return (OfferLimitDTO) entityManager.createQuery(sql).setParameter("companyId", companyId).setParameter("userId", userId)
+                    .setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             log.error(e.getMessage() + " " + e.getLocalizedMessage());
-            return new OfferLimitDTO();
+            return new OfferLimitDTO(0f, 0l);
         }
     }
 }

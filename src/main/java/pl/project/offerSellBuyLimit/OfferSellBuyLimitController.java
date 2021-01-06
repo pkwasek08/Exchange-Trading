@@ -52,16 +52,16 @@ public class OfferSellBuyLimitController {
         return offerSellBuyLimitService.getOffersBuyLimitListByCompanyId(companyId);
     }
 
-    @RequestMapping("/sell/company/first/{companyId}")
+    @RequestMapping("/sell/company/first/{companyId}/user/{userId}")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersSellByCompanyId(@PathVariable Integer companyId) {
-        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferSellLimitByCompanyId(companyId));
+    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersSellByCompanyId(@PathVariable Integer companyId, @PathVariable Integer userId) {
+        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferSellLimitByCompanyId(companyId, userId));
     }
 
-    @RequestMapping("/buy/company/first/{companyId}")
+    @RequestMapping("/buy/company/first/{companyId}/user/{userId}")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersBuyByCompanyId(@PathVariable Integer companyId) {
-        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferBuyLimitByCompanyId(companyId));
+    public ResponseEntity<ExecDetailsOfferLimit> getFirstOffersBuyByCompanyId(@PathVariable Integer companyId, @PathVariable Integer userId) {
+        return ResponseEntity.ok(offerSellBuyLimitService.getFirstOfferBuyLimitByCompanyId(companyId, userId));
     }
 
     @RequestMapping("/user")

@@ -1,8 +1,10 @@
 package pl.project.stock;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserStockDTO {
     String companyName;
     String industry;

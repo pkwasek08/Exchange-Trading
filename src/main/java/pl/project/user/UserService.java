@@ -27,6 +27,14 @@ public class UserService {
         return user;
     }
 
+    public ExecDetailsUser getExecDetailsUser(Integer id) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        User user = userRepository.findById(id).get();
+        execHelper.addNewDbTime();
+        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), user);
+    }
+
     public User getUserByEmailAndPassword(String email, String password) {
         User user = userRepository.findByEmailAndPassword(email, password);
         return user;

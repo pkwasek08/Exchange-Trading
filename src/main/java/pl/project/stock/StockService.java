@@ -55,14 +55,21 @@ public class StockService {
         return userStockViewList;
     }
 
-    public ExecDetailsUserStock getStockByUserIdTableView(@NonNull Integer userId, @NonNull Integer companyId) {
+    public ExecDetailsUserStock getStockExecDetailsByUserAndCompanyId(@NonNull Integer userId, @NonNull Integer companyId) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
-        execHelper.setStartDbTime(OffsetDateTime.now());
-        Stock stockUser = getStockByUserIdAndCompanyId(userId, companyId);
-        UserStockDTO userStockDTO = new UserStockDTO(stockUser.getCompany().getName(), stockUser.getCompany().getIndustry(), stockUser.getAmount());
-        CompanyStatistics companyStatistics = companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(stockUser.getCompany().getId());
-        execHelper.addNewDbTime();
-        userStockDTO.setActualPrice(companyStatistics.getPrice());
+        UserStockDTO userStockDTO;
+        try {
+            execHelper.setStartDbTime(OffsetDateTime.now());
+            Stock stockUser = getStockByUserIdAndCompanyId(userId, companyId);
+            execHelper.addNewDbTime();
+            userStockDTO = new UserStockDTO(stockUser.getCompany().getName(), stockUser.getCompany().getIndustry(), stockUser.getAmount());
+            execHelper.setStartDbTime(OffsetDateTime.now());
+            CompanyStatistics companyStatistics = companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(stockUser.getCompany().getId());
+            execHelper.addNewDbTime();
+            userStockDTO.setActualPrice(companyStatistics.getPrice());
+        } catch (Exception e) {
+            userStockDTO = new UserStockDTO(null, null, 0);
+        }
         return new ExecDetailsUserStock(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), userStockDTO);
     }
 

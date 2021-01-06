@@ -40,7 +40,7 @@ public class StockController {
     @GetMapping("/company/{companyId}/user/{userId}")
     @CrossOrigin(origins = "*")
     public ResponseEntity<ExecDetailsUserStock> getStockByUserIdAndCompanyId(@PathVariable Integer userId, @PathVariable Integer companyId) {
-        return ResponseEntity.ok(stockService.getStockByUserIdTableView(userId, companyId));
+        return ResponseEntity.ok(stockService.getStockExecDetailsByUserAndCompanyId(userId, companyId));
     }
 
     @GetMapping("/user/company")
