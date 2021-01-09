@@ -37,7 +37,7 @@ DROP TABLE IF EXISTS "offers_sell_buy" CASCADE;
 CREATE TABLE "offers_sell_buy" (
                                    "id" SERIAL PRIMARY KEY,
                                    "amount" integer,
-                                   "price" real,
+                                   "price" numeric(10, 2),
                                    "company_id" integer,
                                    "type" varchar,
                                    "date" timestamp,
@@ -49,10 +49,10 @@ DROP TABLE IF EXISTS "offers_sell_buy_limit" CASCADE;
 CREATE TABLE "offers_sell_buy_limit" (
                                          "id" SERIAL PRIMARY KEY,
                                          "amount" integer,
-                                         "price" real,
+                                         "price" numeric(10, 2),
                                          "company_id" integer,
                                          "type" varchar,
-                                         "limit_price" real,
+                                         "limit_price" numeric(10, 2),
                                          "date" timestamp,
                                          "user_id" integer,
                                          "active" boolean

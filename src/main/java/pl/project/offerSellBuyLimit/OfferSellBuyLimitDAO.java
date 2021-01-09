@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -63,4 +64,29 @@ public class OfferSellBuyLimitDAO {
             return new OfferLimitDTO(0f, 0l);
         }
     }
+
+    public List<OfferLimitDTO> findAllOfferBuyLimitByCompanyIdAndUserId(Integer companyId, Integer userId) {
+        String sql = "SELECT NEW pl.project.offerSellBuyLimit.OfferLimitDTO(o.price, sum(o.amount))" +
+                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Buy' AND o.active = TRUE AND (o.user.id != :userId OR o.user.id = null) GROUP BY o.price ORDER BY o.price DESC";
+        try {
+            return entityManager.createQuery(sql).setParameter("companyId", companyId).setParameter("userId", userId).setMaxResults(10).getResultList();
+
+        } catch (NoResultException e) {
+            log.error(e.getMessage() + " " + e.getLocalizedMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public List<OfferLimitDTO> findAllOfferSellLimitByCompanyIdAndUserId(Integer companyId, Integer userId) {
+        String sql = "SELECT NEW pl.project.offerSellBuyLimit.OfferLimitDTO(o.price, sum(o.amount))" +
+                " FROM OfferSellBuyLimit o WHERE o.company.id = :companyId AND o.type = 'Sell' AND o.active = TRUE AND (o.user.id != :userId OR o.user.id = null) GROUP BY o.price ORDER BY o.price ASC";
+        try {
+            return entityManager.createQuery(sql).setParameter("companyId", companyId).setParameter("userId", userId).setMaxResults(10).getResultList();
+
+        } catch (NoResultException e) {
+            log.error(e.getMessage() + " " + e.getLocalizedMessage());
+            return Collections.emptyList();
+        }
+    }
+
 }
