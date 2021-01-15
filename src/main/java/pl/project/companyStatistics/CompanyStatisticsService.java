@@ -7,18 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.project.company.CompanyService;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class CompanyStatisticsService {
     Logger log = LogManager.getLogger(this.getClass());
     @Autowired
     private CompanyStatisticsRepository companyStatisticsRepository;
+    @Autowired
+    private CompanyStatisticDAO companyStatisticDAO;
     @Autowired
     private CompanyService companyService;
 
@@ -46,12 +48,24 @@ public class CompanyStatisticsService {
     }
 
     public CompanyStatistics getCompanyStatisticsByCompanyIdLatest(Integer companyId) {
-         CompanyStatistics companyStatistics = companyStatisticsRepository.findFirstByCompany_IdOrderByDateDesc(companyId);
-         if(companyStatistics != null){
-             return companyStatistics;
-         } else {
-             return getNewDailyCompanyStatistic(companyId);
-         }
+        CompanyStatistics companyStatistics = companyStatisticsRepository.findFirstByCompany_IdOrderByDateDesc(companyId);
+        if (companyStatistics != null) {
+            return companyStatistics;
+        } else {
+            return getNewDailyCompanyStatistic(companyId, new Date());
+        }
+    }
+
+    public CompanyStatistics getCompanyStatisticsByCompanyIdAndDate(Integer companyId, Date dateTrade) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTrade);
+        CompanyStatistics companyStatistics = companyStatisticDAO.findFirstByCompany_IdAndDayAndMonthAndYear(companyId,
+                calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+        if (nonNull(companyStatistics)) {
+            return companyStatistics;
+        } else {
+            return getNewDailyCompanyStatistic(companyId, dateTrade);
+        }
     }
 
     public void updateCompanyStatistics(Integer id, CompanyStatistics companyStatistics) {
@@ -64,17 +78,17 @@ public class CompanyStatisticsService {
     }
 
 
-    public void updateDailyCompanyStatistic(Integer companyId, float price, int amount) {
-        CompanyStatistics companyStatistics = getCompanyStatisticsByCompanyIdLatest(companyId);
+    public void updateDailyCompanyStatistic(Integer companyId, float price, int amount, Date dateTrade) {
+        CompanyStatistics companyStatistics = getCompanyStatisticsByCompanyIdAndDate(companyId, dateTrade);
         settleStaticCompany(companyStatistics, price, amount);
     }
 
-    private void settleStaticCompany(CompanyStatistics companyStatistics, float price, int amount){
+    private void settleStaticCompany(CompanyStatistics companyStatistics, float price, int amount) {
         Float offerPrice = price;
         Float companyStatisticActualPrice = companyStatistics.getPrice();
         if (!(offerPrice.compareTo(companyStatistics.getPrice()) == 0)) {
             companyStatistics.setPrice(offerPrice);
-            if(companyStatisticActualPrice != 0) {
+            if (companyStatisticActualPrice != 0) {
                 float trend = 100 - (companyStatistics.getPrice() / companyStatisticActualPrice) * 100;
                 companyStatistics.setTrendValue(trend);
             }
@@ -86,24 +100,16 @@ public class CompanyStatisticsService {
             companyStatistics.setMinPrice(offerPrice);
         }
         companyStatistics.setVolume(companyStatistics.getVolume() + amount);
-        SimpleDateFormat formatter = new SimpleDateFormat(
-                "dd/MM/yyyy");
-        try {
-            if (formatter.parse(formatter.format(new Date())).equals(formatter.parse(formatter.format(companyStatistics.getDate())))) {
-                updateCompanyStatistics(companyStatistics.getId(), companyStatistics);
-            } else {
-                addCompanyStatistics(getNewDailyCompanyStatisticByCompanyStatistic(companyStatistics, amount));
-            }
-        } catch (ParseException e) {
-            log.error("Error " + this.getClass() + " message: " + e.getMessage());
-        }
+
+        addCompanyStatistics(companyStatistics);
+
     }
 
-    private CompanyStatistics getNewDailyCompanyStatisticByCompanyStatistic(CompanyStatistics companyStatistics, int amountStocks){
+    private CompanyStatistics getNewDailyCompanyStatisticByCompanyStatistic(CompanyStatistics companyStatistics) {
         CompanyStatistics csDaily = new CompanyStatistics();
         csDaily.setPrice(companyStatistics.getPrice());
         csDaily.setDate(new Date());
-        csDaily.setVolume(amountStocks);
+        csDaily.setVolume(companyStatistics.getVolume());
         csDaily.setMaxPrice(companyStatistics.getMaxPrice());
         csDaily.setMinPrice(companyStatistics.getMinPrice());
         csDaily.setTrendValue(companyStatistics.getTrendValue());
@@ -111,10 +117,10 @@ public class CompanyStatisticsService {
         return csDaily;
     }
 
-    private CompanyStatistics getNewDailyCompanyStatistic(Integer companyId){
+    private CompanyStatistics getNewDailyCompanyStatistic(Integer companyId, Date dateTrade) {
         CompanyStatistics csDaily = new CompanyStatistics();
         csDaily.setPrice(0f);
-        csDaily.setDate(new Date());
+        csDaily.setDate(dateTrade);
         csDaily.setVolume(0);
         csDaily.setMaxPrice(0f);
         csDaily.setMinPrice(Float.MAX_VALUE);

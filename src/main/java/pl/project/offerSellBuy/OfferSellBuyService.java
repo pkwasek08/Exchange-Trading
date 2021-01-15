@@ -61,13 +61,12 @@ public class OfferSellBuyService {
             log.error(e.getCause());
         } finally {
             execHelper.addNewDbTime();
-            return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+            return new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime());
         }
     }
 
     public ExecDetails addOfferSellBuy(OfferSellBuyDTO offerSellBuyDTO) {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
-        execHelper.setStartDbTime(OffsetDateTime.now());
         OfferSellBuy offerSellBuy = new OfferSellBuy(0l, offerSellBuyDTO.getAmount(), offerSellBuyDTO.getPrice(),
                 offerSellBuyDTO.getType(), offerSellBuyDTO.getDate(), companyService.getCompany(offerSellBuyDTO.getCompanyId()),
                 userService.getUser(offerSellBuyDTO.getUserId()), true);
@@ -76,8 +75,7 @@ public class OfferSellBuyService {
         } catch (Exception e) {
             log.error(new Date().getTime() + " " + e.getStackTrace());
         } finally {
-            execHelper.addNewDbTime();
-            return new ExecDetails(execHelper.getDbTime(), execHelper.getExecTime());
+            return new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime());
         }
     }
 
@@ -122,7 +120,7 @@ public class OfferSellBuyService {
                 executedSellOffer.setAmount(amount);
                 executedSellOffer.setPrice(amount * offerLimit.getPrice());
                 executedSellOffer.setType(offerSellBuy.getType());
-                executedSellOffer.setDate(new Date());
+                executedSellOffer.setDate(offerSellBuy.getDate());
                 executedSellOffer.setCompany(offerSellBuy.getCompany());
                 executedSellOffer.setUser(offerSellBuy.getUser());
                 executedSellOffer.setActive(false);
@@ -132,7 +130,7 @@ public class OfferSellBuyService {
                 executedBuyOffer.setAmount(amount);
                 executedBuyOffer.setPrice(amount * offerLimit.getPrice());
                 executedBuyOffer.setType(offerLimit.getType());
-                executedBuyOffer.setDate(new Date());
+                executedBuyOffer.setDate(offerSellBuy.getDate());
                 executedBuyOffer.setCompany(offerLimit.getCompany());
                 executedBuyOffer.setUser(offerLimit.getUser());
                 executedBuyOffer.setActive(false);
@@ -149,7 +147,7 @@ public class OfferSellBuyService {
                     offerLimit.setActive(false);
                 }
                 offerSellBuyLimitService.updateOfferSellBuyLimit(offerLimit);
-                companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
+                companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount(), executedBuyOffer.getDate());
                 if (amount == 0) {
                     break;
                 }
@@ -180,7 +178,7 @@ public class OfferSellBuyService {
                 executedSellOffer.setAmount(amount);
                 executedSellOffer.setPrice(amount * offerLimit.getPrice());
                 executedSellOffer.setType(offerLimit.getType());
-                executedSellOffer.setDate(new Date());
+                executedSellOffer.setDate(offerSellBuy.getDate());
                 executedSellOffer.setCompany(offerLimit.getCompany());
                 executedSellOffer.setUser(offerLimit.getUser());
                 executedSellOffer.setActive(false);
@@ -190,7 +188,7 @@ public class OfferSellBuyService {
                 executedBuyOffer.setAmount(amount);
                 executedBuyOffer.setPrice(amount * offerLimit.getPrice());
                 executedBuyOffer.setType(offerSellBuy.getType());
-                executedBuyOffer.setDate(new Date());
+                executedBuyOffer.setDate(offerSellBuy.getDate());
                 executedBuyOffer.setCompany(offerSellBuy.getCompany());
                 executedBuyOffer.setUser(offerSellBuy.getUser());
                 executedBuyOffer.setActive(false);
@@ -211,7 +209,7 @@ public class OfferSellBuyService {
                     offerLimit.setActive(false);
                 }
                 offerSellBuyLimitService.updateOfferSellBuyLimit(offerLimit);
-                companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount());
+                companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount(), executedBuyOffer.getDate());
                 if (amount == 0) {
                     break;
                 }

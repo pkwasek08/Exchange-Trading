@@ -2,7 +2,10 @@ package pl.project.company;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.project.execDetails.ExecDetails;
+import pl.project.execDetails.ExecDetailsHelper;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,14 @@ public class CompanyService {
     public Company getCompany(Integer id) {
         Company company = companyRepository.findById(id).get();
         return company;
+    }
+
+    public ExecDetailsCompany getCompanyInfoList() {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        List<CompanyInfoDTO> companyInfoList = companyRepository.getCompanyInfoList();
+        execHelper.addNewDbTime();
+        return new ExecDetailsCompany(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), companyInfoList);
     }
 
     public void addCompany(Company company) {

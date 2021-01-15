@@ -32,7 +32,7 @@ public class UserService {
         execHelper.setStartDbTime(OffsetDateTime.now());
         User user = userRepository.findById(id).get();
         execHelper.addNewDbTime();
-        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), user);
+        return new ExecDetailsUser(execHelper.getExecTime(), execHelper.getDbTime(), user);
     }
 
     public User getUserByEmailAndPassword(String email, String password) {
@@ -45,7 +45,7 @@ public class UserService {
         execHelper.setStartDbTime(OffsetDateTime.now());
         User newUser = userRepository.save(user);
         execHelper.addNewDbTime();
-        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), newUser);
+        return new ExecDetailsUser(execHelper.getExecTime(), execHelper.getDbTime(), newUser);
     }
 
     public ExecDetailsUser addUserList(List<User> userList) {
@@ -54,7 +54,7 @@ public class UserService {
         List<User> resultUserList = new LinkedList<>();
         userList.stream().forEach(user -> resultUserList.add(userRepository.save(user)));
         execHelper.addNewDbTime();
-        return new ExecDetailsUser(execHelper.getDbTime(), execHelper.getExecTime(), resultUserList);
+        return new ExecDetailsUser(execHelper.getExecTime(), execHelper.getDbTime(), resultUserList);
     }
 
     public void updateUser(Integer id, User user) {

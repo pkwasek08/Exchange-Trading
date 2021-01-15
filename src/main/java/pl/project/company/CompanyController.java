@@ -1,6 +1,7 @@
 package pl.project.company;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,11 @@ public class CompanyController {
     @GetMapping("/{id}")
     public Company getCompany(@PathVariable Integer id) {
         return companyService.getCompany(id);
+    }
+
+    @GetMapping("/infoList")
+    public ResponseEntity<ExecDetailsCompany> getCompanyIdList() {
+        return ResponseEntity.ok(companyService.getCompanyInfoList());
     }
 
     @PostMapping()
