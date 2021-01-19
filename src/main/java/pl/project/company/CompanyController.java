@@ -23,8 +23,13 @@ public class CompanyController {
     }
 
     @GetMapping("/infoList")
-    public ResponseEntity<ExecDetailsCompany> getCompanyIdList() {
-        return ResponseEntity.ok(companyService.getCompanyInfoList());
+    public ResponseEntity<ExecDetailsCompany> getCompanyIdListDetails() {
+        return ResponseEntity.ok(companyService.getCompanyInfoListDetails());
+    }
+
+    @GetMapping("/simpleInfoList")
+    public List<CompanyInfoDTO> getCompanyIdList() {
+        return companyService.getCompanyInfoList();
     }
 
     @PostMapping()

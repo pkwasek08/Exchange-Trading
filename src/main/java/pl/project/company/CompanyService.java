@@ -25,12 +25,16 @@ public class CompanyService {
         return company;
     }
 
-    public ExecDetailsCompany getCompanyInfoList() {
+    public ExecDetailsCompany getCompanyInfoListDetails() {
         ExecDetailsHelper execHelper = new ExecDetailsHelper();
         execHelper.setStartDbTime(OffsetDateTime.now());
         List<CompanyInfoDTO> companyInfoList = companyRepository.getCompanyInfoList();
         execHelper.addNewDbTime();
         return new ExecDetailsCompany(new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime()), companyInfoList);
+    }
+
+    public List<CompanyInfoDTO> getCompanyInfoList() {
+        return companyRepository.getCompanyInfoList();
     }
 
     public void addCompany(Company company) {
