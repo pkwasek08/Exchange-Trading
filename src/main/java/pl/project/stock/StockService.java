@@ -49,7 +49,6 @@ public class StockService {
             CompanyStatistics companyStatistics = companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(stock.getCompany().getId());
             userStockDTO.setActualPrice(companyStatistics.getPrice());
             userStockDTO.setTrend(companyStatistics.getTrendValue());
-            //userStockDTO.setActualPrice(getCurrentPriceStockUser(stock.getCompany().getId(), stock.getAmount()));
             userStockViewList.add(userStockDTO);
         });
         return userStockViewList;

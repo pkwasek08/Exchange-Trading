@@ -151,6 +151,8 @@ public class OfferSellBuyService {
                 if (amount == 0) {
                     break;
                 }
+            } else {
+                return;
             }
         }
     }
@@ -213,6 +215,8 @@ public class OfferSellBuyService {
                 if (amount == 0) {
                     break;
                 }
+            } else {
+                return;
             }
         }
     }
