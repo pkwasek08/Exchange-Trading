@@ -99,9 +99,7 @@ public class OfferSellBuyService {
     }
 
     private void executeSellTransaction(OfferSellBuy offerSellBuy) {
-        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.
-                getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompany().getId(),
-                        "Buy");
+        List<OfferSellBuyLimit> offerLimitList = offerSellBuyLimitService.getAllOffersLimitByCompanyAndTypeAndActive(offerSellBuy.getCompany().getId(), "Buy");
 
         int valueStockUser = 0;
         int amountStock = offerSellBuy.getAmount();
@@ -137,28 +135,19 @@ public class OfferSellBuyService {
                 executedBuyOffer.setUser(offerLimit.getUser());
                 executedBuyOffer.setActive(false);
 
-                offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() -
-                        offerLimit.getPrice() * amount);
-                userService.settleUserMoney(offerSellBuy.getUser().getId(),
-                        offerSellBuy.getUser().getCash());
+                offerSellBuy.getUser().setCash(offerSellBuy.getUser().getCash() - offerLimit.getPrice() * amount);
+                userService.settleUserMoney(offerSellBuy.getUser().getId(), offerSellBuy.getUser().getCash());
                 addOffer(executedBuyOffer);
                 addOffer(executedSellOffer);
-                stockService.removeStockFromUser(executedSellOffer.getUser(),
-                        executedSellOffer.getCompany(),
-                        executedSellOffer.getAmount());
-                stockService.addStockToUser(executedBuyOffer.getUser(),
-                        executedBuyOffer.getCompany(),
-                        executedBuyOffer.getAmount());
+                stockService.removeStockFromUser(executedSellOffer.getUser(), executedSellOffer.getCompany(), executedSellOffer.getAmount());
+                stockService.addStockToUser(executedBuyOffer.getUser(), executedBuyOffer.getCompany(), executedBuyOffer.getAmount());
 
                 offerLimit.setAmount(offerLimit.getAmount() - amount);
                 if (offerLimit.getAmount() == 0) {
                     offerLimit.setActive(false);
                 }
                 offerSellBuyLimitService.updateOfferSellBuyLimit(offerLimit);
-                companyStatisticsService.
-                        updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(),
-                        offerLimit.getPrice(), executedBuyOffer.getAmount(),
-                                executedBuyOffer.getDate());
+                companyStatisticsService.updateDailyCompanyStatistic(executedBuyOffer.getCompany().getId(), offerLimit.getPrice(), executedBuyOffer.getAmount(), executedBuyOffer.getDate());
                 if (amount == 0) {
                     break;
                 }

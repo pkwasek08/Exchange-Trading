@@ -66,6 +66,20 @@ public class OfferSellBuyLimitService {
         executeTranscation(offerSellBuyLimit);
     }
 
+    public ExecDetails addOfferSellBuyLimitDetails(OfferLimitDTO offerLimitDTO) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        OfferSellBuyLimit offerSellBuyLimit = new OfferSellBuyLimit(offerLimitDTO.getId(), Math.toIntExact(offerLimitDTO.getAmount()),
+                offerLimitDTO.getPrice(), offerLimitDTO.getType(), offerLimitDTO.getLimit(), offerLimitDTO.getDate(),
+                companyService.getCompany(offerLimitDTO.getCompanyId()), userService.getUser(offerLimitDTO.getUserId()), true);
+        execHelper.setStartDbTime(OffsetDateTime.now());
+        offerSellBuyLimit = offerSellBuyLimitRepository.save(offerSellBuyLimit);
+        execHelper.addNewDbTime();
+        ExecDetails executeTranscationDetails = executeTranscationDetails(offerSellBuyLimit);
+        execHelper.setDbTime(execHelper.getDbTime() + executeTranscationDetails.getDbTime());
+        execHelper.setExecTime(execHelper.getExecTime() + executeTranscationDetails.getExeTime());
+        return new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime());
+    }
+
     public void addOfferSellBuyLimit(OfferLimitDTO offerLimitDTO) {
         OfferSellBuyLimit offerSellBuyLimit = new OfferSellBuyLimit(offerLimitDTO.getId(), Math.toIntExact(offerLimitDTO.getAmount()),
                 offerLimitDTO.getPrice(), offerLimitDTO.getType(), offerLimitDTO.getLimit(), offerLimitDTO.getDate(),
@@ -138,6 +152,21 @@ public class OfferSellBuyLimitService {
         } else {
             stockService.removeStockFromUser(offerSellBuyLimit.getUser(), offerSellBuyLimit.getCompany(), offerSellBuyLimit.getAmount());
         }
+    }
+
+    public ExecDetails executeTranscationDetails(OfferSellBuyLimit offerSellBuyLimit) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        if (offerSellBuyLimit.getType().equals("Buy")) {
+            float purchaseOffer = offerSellBuyLimit.getPrice() * offerSellBuyLimit.getAmount();
+            execHelper.setStartDbTime(OffsetDateTime.now());
+            userService.settleUserMoney(offerSellBuyLimit.getUser().getId(), offerSellBuyLimit.getUser().getCash() - purchaseOffer);
+            execHelper.addNewDbTime();
+        } else {
+            ExecDetails removeStockFromUserDetails = stockService.removeStockFromUserDetails(offerSellBuyLimit.getUser(), offerSellBuyLimit.getCompany(), offerSellBuyLimit.getAmount());
+            execHelper.setDbTime(execHelper.getDbTime() + removeStockFromUserDetails.getDbTime());
+            execHelper.setExecTime(execHelper.getExecTime() + removeStockFromUserDetails.getExeTime());
+        }
+        return new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime());
     }
 
     private int settleAmountStock(Integer sellAmount, Integer buyAmount) {

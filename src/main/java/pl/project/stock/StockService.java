@@ -110,6 +110,22 @@ public class StockService {
         }
     }
 
+    public ExecDetails removeStockFromUserDetails(User user, Company company, int amount) {
+        ExecDetailsHelper execHelper = new ExecDetailsHelper();
+        Stock stock = getStockByUserIdAndCompanyId(user.getId(), company.getId());
+        stock.setAmount(stock.getAmount() - amount);
+        if (stock.getAmount() > 0) {
+            execHelper.setStartDbTime(OffsetDateTime.now());
+            updateStock(stock);
+            execHelper.addNewDbTime();
+        } else {
+            execHelper.setStartDbTime(OffsetDateTime.now());
+            deleteStock(stock.getId());
+            execHelper.addNewDbTime();
+        }
+        return new ExecDetails(execHelper.getExecTime(), execHelper.getDbTime());
+    }
+
     public void removeStockFromUser(User user, Company company, int amount) {
         Stock stock = getStockByUserIdAndCompanyId(user.getId(), company.getId());
         stock.setAmount(stock.getAmount() - amount);
