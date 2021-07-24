@@ -24,20 +24,20 @@ public class CompanyStatisticsController {
         return companyStatisticsService.getCompanyStatistics(id);
     }
 
-    @RequestMapping("/company")
+    @GetMapping("/company")
     @CrossOrigin(origins = "*")
     public List<CompanyStatistics> getCompanyStatisticsByCompanyId(@RequestParam Integer companyId) {
         return companyStatisticsService.getCompanyStatisticsByCompanyId(companyId);
     }
 
-    @RequestMapping("/company/paginator")
+    @GetMapping("/company/paginator")
     @CrossOrigin(origins = "*")
     public Page<CompanyStatistics> getCompanyStatisticsByCompanyIdPage(@RequestParam Integer companyId, @RequestParam int page, @RequestParam int size) {
         return companyStatisticsService.getCompanyStatisticsPageByCompanyId(companyId, page, size);
     }
 
 
-    @RequestMapping("/company/latest")
+    @GetMapping("/company/latest")
     @CrossOrigin(origins = "*")
     public CompanyStatistics getCompanyStatisticsByCompanyIdLatest(@RequestParam Integer companyId) {
         return companyStatisticsService.getCompanyStatisticsByCompanyIdLatest(companyId);

@@ -34,7 +34,7 @@ public class UserController {
     }
 
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     @CrossOrigin(origins = "*")
     public User getUserByEmailAndPassword(@RequestParam String email, @RequestParam String password) {
         return userService.getUserByEmailAndPassword(email, password);

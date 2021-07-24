@@ -24,7 +24,7 @@ public class OfferSellBuyController {
         return offerSellBuyService.getAllOfferSellBuy();
     }
 
-    @RequestMapping("/user/paginator")
+    @GetMapping("/user/paginator")
     @CrossOrigin(origins = "*")
     public Page<OfferSellBuy> getAllOfferByUserId(@RequestParam Integer userId, @RequestParam int page, @RequestParam int size) {
         return offerSellBuyService.getAllOffersByUserId(userId, page, size);
