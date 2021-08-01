@@ -1,5 +1,26 @@
 # Exchange Trading
-It's main application of the entire Exchange-Trading project.  
+``Exchange-Trading`` was made as part of the BSc Thesis. Application is simulator of real stock exchange. Main futures for users:
+- list of noticed companies
+- view on price statistics of noticed companies
+- price and volumes charts
+- sell and buy company stocks
+- create sell and buy limit offers (offers create orderbook)
+- preview of the company's stock orders (orderbook)
+- manage own investors wallet
+- simple authorization
+
+[Exchange-Trading-Tester](https://github.com/pkwasek08/Exchange-Trading-Tester) is additional module responsible for simulating behaviour of the real stock excgange and generating price statistics of noticed company. 
+It has special endpoint that activate special algorithm. Thanks for that system can generate artificial stock exchange data.
+
+Both of api applications have own ``Postgresql`` database and common frontend application [Exchange-Trading-App](https://github.com/pkwasek08/Exchange-Trading-App). Only admin can run simulation from the UI test.
+
+System registers time which is need to process stock exchange operations. ``Exchange-Trading`` is monitored by ``Prometheus`` - special tool to monitor system behaviour and resources usage.  
+
+Data can be display on charts using ``Grafana`` (tool to draw charts in real time). 
+
+Docker image has been created for all modules. Entire ``Exchange-Trading`` can be run by ``docker-compose`` in [Exchange-Trading-DevOps](https://github.com/pkwasek08/Exchange-Trading-DevOps) repository.
+
+This project is main api application.  
 Application contains all mechanisms that are responsible for the proper functioning of the stock exchange.
  
 ## Technologies
